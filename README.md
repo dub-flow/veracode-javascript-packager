@@ -36,5 +36,7 @@ Flags:
 
 # Setup
 - You can simply run it from source via `go run main.go` 
-- How to build..
-- Releases?
+- You can build the project yourself simply via `go build`
+
+# Releases
+- The `/releases` folder contains some binary releases already so that you might not have to build it yourself

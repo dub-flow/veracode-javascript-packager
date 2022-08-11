@@ -1,3 +1,3 @@
-module veracode/my/node-packager
+module vc-node-packager
 
 go 1.17
