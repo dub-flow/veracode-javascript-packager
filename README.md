@@ -28,9 +28,10 @@ Flags:
 - Creates a zip of the `-source` folder and puts it into the provided `-target` directory as `upload.zip`
 - `Features`:
     - Omit `node_modules`
-    - Omit `.css` and `.scss` files
+    - Omit style sheets (`.css` and `.scss` files)
+    - Omit popular image extensions (e.g. `.jpg`, `.png`) 
+    - Omit popular document extensions (e.g. `.pdf`)
 
 # Upcoming Features (hopefully)
-    - Omit images
     - Omit `test` folder
     - Omit `public` folder 

@@ -13,6 +13,8 @@ import (
 // flag to make sure a message is only logged once
 var didPrintNodeModulesMsg bool = false
 var didPrintStylesheetsMsg bool = false
+var didPrintImagesMsg bool = false
+var didPrintDocumentsMsg bool = false
 
 func main() {
 	// parse all the command line flags
@@ -109,6 +111,16 @@ func isRequired(path string) bool {
 		return false
 	}
 
+	// check for images (like .jpg, .png, .jpeg)
+	if isImage(path) {
+		return false
+	}
+
+	// check for documents (like .pdf, .md)
+	if isDocument(path) {
+		return false
+	}
+
 	// the default is to not omit the file
 	return true
 }
@@ -134,6 +146,40 @@ func isStyleSheet(path string) bool {
 		}
 
 		return true
+	}
+
+	return false
+}
+
+func isImage(path string) bool {
+	imageExtensions := [6]string{".jpg", ".png", ".jpeg", ".gif", ".svg", ".bmp"}
+
+	for _, element := range imageExtensions {
+		if strings.HasSuffix(path, element) {
+			if !didPrintImagesMsg {
+				log.Println("Ignoring images")
+				didPrintImagesMsg = true
+			}
+
+			return true
+		}
+	}
+
+	return false
+}
+
+func isDocument(path string) bool {
+	documentExtensions := [2]string{".pdf", ".md"}
+
+	for _, element := range documentExtensions {
+		if strings.HasSuffix(path, element) {
+			if !didPrintDocumentsMsg {
+				log.Println("Ignoring documents")
+				didPrintDocumentsMsg = true
+			}
+
+			return true
+		}
 	}
 
 	return false
