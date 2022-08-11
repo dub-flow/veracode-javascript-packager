@@ -10,12 +10,16 @@ import (
 	"strings"
 )
 
+// flag to make sure a message is only logged once
+var didPrintNodeModulesMsg bool = false
+var didPrintStylesheetsMsg bool = false
+
 func main() {
 	log.Println("Node Packager - Started")
 
 	// parse all the command line flags
-	sourcePtr := flag.String("source", "/opt/my-node-project", "the path of the Node.js app you want to package")
-	targetPtr := flag.String("target", "/tmp", "the path where you want the output.zip to be stored to")
+	sourcePtr := flag.String("source", "../test-projects/my-node-test", "the path of the Node.js app you want to package")
+	targetPtr := flag.String("target", ".", "the path where you want the output.zip to be stored to")
 	flag.Parse()
 
 	outputZipPath := *targetPtr + "/output.zip"
@@ -44,9 +48,6 @@ func zipSource(source, target string) error {
 	writer := zip.NewWriter(f)
 	defer writer.Close()
 
-	// some flags for logging
-	didPrintNodeModulesMsg := false
-
 	// 2. Go through all the files of the source
 	return filepath.Walk(source, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -68,13 +69,8 @@ func zipSource(source, target string) error {
 			return err
 		}
 
-		// ignore `node_modules`
-		if strings.Contains(header.Name, "node_modules") {
-			if !didPrintNodeModulesMsg {
-				log.Println("Ignoring `node_modules`")
-				didPrintNodeModulesMsg = true
-			}
-
+		// check if the path is required for the upload (otherwise, it will be omitted)
+		if !isRequired(header.Name) {
 			return nil
 		}
 
@@ -101,4 +97,38 @@ func zipSource(source, target string) error {
 		_, err = io.Copy(headerWriter, f)
 		return err
 	})
+}
+
+func isRequired(path string) bool {
+	// check for `node_modules`
+	if isNodeModules(path) {
+		return false
+	}
+
+	// check for style sheets (.css and .scss)
+	if isStyleSheet(path) {
+		return false
+	}
+
+	// the default is to not omit the file
+	return true
+}
+
+func isNodeModules(path string) bool {
+	if strings.Contains(path, "node_modules") {
+		if !didPrintNodeModulesMsg {
+			log.Println("Ignoring `node_modules`")
+			didPrintNodeModulesMsg = true
+		}
+
+		return true
+	}
+
+	return false
+}
+
+func isStyleSheet(path string) bool {
+
+	didPrintStylesheetsMsg = true
+	return false
 }
