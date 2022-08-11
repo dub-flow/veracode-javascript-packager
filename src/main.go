@@ -2,24 +2,35 @@ package main
 
 import (
 	"archive/zip"
+	"flag"
 	"io"
 	"log"
 	"os"
 	"path/filepath"
-    "strings"
+	"strings"
 )
 
 func main() {
 	log.Println("Node Packager - Started")
 
-	folderToZip := "test-projects/my-node-test" // "../test-projects/the-example-app.nodejs-master"
-	outputZip := "output.zip"
+	// parse all the command line flags
+	sourcePtr := flag.String("source", "/opt/my-node-project", "the path of the Node.js app you want to package")
+	targetPtr := flag.String("target", "/tmp", "the path where you want the output.zip to be stored to")
+	flag.Parse()
 
-	log.Println("Attempting to zip the source")
-	if err := zipSource(folderToZip, outputZip); err != nil {
+	outputZipPath := *targetPtr + "/output.zip"
+	// folderToZip := "test-projects/my-node-test" // "../test-projects/the-example-app.nodejs-master"
+	// outputZip := "output.zip"
+
+	log.Println("Source directory to zip up:", *sourcePtr)
+	log.Println("Zip Process - Started")
+
+	if err := zipSource(*sourcePtr, outputZipPath); err != nil {
 		log.Fatal(err)
 	}
-	log.Println("Finished zipping")
+
+	log.Println("Zip Process - Finished")
+	log.Println("Wrote output to:", outputZipPath)
 }
 
 func zipSource(source, target string) error {
@@ -32,6 +43,9 @@ func zipSource(source, target string) error {
 
 	writer := zip.NewWriter(f)
 	defer writer.Close()
+
+	// some flags for logging
+	didPrintNodeModulesMsg := false
 
 	// 2. Go through all the files of the source
 	return filepath.Walk(source, func(path string, info os.FileInfo, err error) error {
@@ -54,10 +68,15 @@ func zipSource(source, target string) error {
 			return err
 		}
 
-        // ignore `node_modules`
-        if strings.Contains(header.Name, "node_modules") {
-            return nil
-        }
+		// ignore `node_modules`
+		if strings.Contains(header.Name, "node_modules") {
+			if !didPrintNodeModulesMsg {
+				log.Println("Ignoring `node_modules`")
+				didPrintNodeModulesMsg = true
+			}
+
+			return nil
+		}
 
 		if info.IsDir() {
 			header.Name += "/"
