@@ -31,7 +31,9 @@ Flags:
     - Omit style sheets (`.css` and `.scss` files)
     - Omit popular image extensions (e.g. `.jpg`, `.png`) 
     - Omit popular document extensions (e.g. `.pdf`)
+    - Omit `.git` folder
 
 # Upcoming Features (hopefully)
     - Omit `test` folder
     - Omit `public` folder 
+    - Omit `.DS_Store` file

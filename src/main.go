@@ -15,6 +15,7 @@ var didPrintNodeModulesMsg bool = false
 var didPrintStylesheetsMsg bool = false
 var didPrintImagesMsg bool = false
 var didPrintDocumentsMsg bool = false
+var didPrintGitFolderMsg bool = false
 
 func main() {
 	// parse all the command line flags
@@ -121,6 +122,11 @@ func isRequired(path string) bool {
 		return false
 	}
 
+	// check for ``.git`` folder
+	if isGitFolder(path) {
+		return false
+	}
+
 	// the default is to not omit the file
 	return true
 }
@@ -180,6 +186,19 @@ func isDocument(path string) bool {
 
 			return true
 		}
+	}
+
+	return false
+}
+
+func isGitFolder(path string) bool {
+	if strings.Contains(path, ".git") {
+		if !didPrintGitFolderMsg {
+			log.Println("Ignoring `.git`")
+			didPrintGitFolderMsg = true
+		}
+
+		return true
 	}
 
 	return false
