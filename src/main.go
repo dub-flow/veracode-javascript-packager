@@ -15,8 +15,6 @@ var didPrintNodeModulesMsg bool = false
 var didPrintStylesheetsMsg bool = false
 
 func main() {
-	log.Println("Node Packager - Started")
-
 	// parse all the command line flags
 	sourcePtr := flag.String("source", "../test-projects/my-node-test", "the path of the Node.js app you want to package")
 	targetPtr := flag.String("target", ".", "the path where you want the output.zip to be stored to")
@@ -26,6 +24,7 @@ func main() {
 	// folderToZip := "test-projects/my-node-test" // "../test-projects/the-example-app.nodejs-master"
 	// outputZip := "output.zip"
 
+	log.Println("Node Packager - Started")
 	log.Println("Source directory to zip up:", *sourcePtr)
 	log.Println("Zip Process - Started")
 
