@@ -23,7 +23,11 @@ Flags:
 
 # What does it do?
 - Creates a zip of the `-source` folder and puts it into the provided `-target` directory as `upload.zip`
-- `Features`:
+- `Features`: 
+    - This tool creates a zip of your application ready to be uploaded to the Veracode Platform
+    - It prevents common, non-required, files from being a part of the zip (such as `node_modules`, `tests`)
+    - The tool also checks for "smells" that indicates something might not right with the packaging, and prints corresponding warnings if a "smell" was found
+- `Files to be omitted`:
     - Omit the `node_modules` folder (usually only contains 3rd party libraries)
     - Omit the `tests` directory (that contains e.g. your unit- and integration tests)
         - Specified via `-test <path>`
@@ -32,7 +36,11 @@ Flags:
     - Omit documents (e.g. `.pdf`)
     - Omit the `.git` folder
     - Omit other not-required files (e.g. `.DS_Store`)
-
+- `Additional Checks`:
+    - Check if `package-lock.json` exists (this is required for Veracode SCA)
+    - Check if `public` exists (may contain resources that are not part of your source code)
+    - Check if `dist` exists (may contain resources that are not part of your source code)
+    - Check for `.map` files (indicates that your JS files might be minified)
 
 # Setup
 - You can simply run it from source via `go run main.go` 

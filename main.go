@@ -4,10 +4,11 @@ import (
 	"archive/zip"
 	"flag"
 	"io"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
+
+	log "github.com/sirupsen/logrus"
 )
 
 // flag to make sure a message is only logged once
@@ -28,22 +29,53 @@ func main() {
 	outputZipPath := *targetPtr + "/output.zip"
 	testsPath := *sourcePtr + "/" + *testsPtr + "/"
 
-	log.Println("Veracode Node Packager - Started")
-	log.Println("Source directory to zip up:", *sourcePtr)
-	log.Println("Test directory (its content will be omitted):", testsPath)
-	log.Println("Zip Process - Started...")
+	log.Info("Veracode Node Packager - Started")
 
-	// NOTE: Search for `package-lock.json` file
+	// check for some "smells" (e.g. the `package-lock.json` file is missing), and print corresponding warnings
+	log.Info("Checking for \"smells\" that indicate packaging issues - Started...")
+	checkForPotentialSmells(*sourcePtr)
+	log.Info("Checking for \"smells\" that indicate packaging issues - Done")
 
+	log.Info("Creating a Zip while omitting non-required files - Started...")
+	log.Info("Source directory to zip up:", *sourcePtr)
+	log.Info("Test directory (its content will be omitted):", testsPath)
+
+	// generate the zip file, and omit all non-required files
 	if err := zipSource(*sourcePtr, outputZipPath, testsPath); err != nil {
-		log.Fatal(err)
+		log.Error(err)
 	}
 
-	log.Println("Zip Process - Finished")
-	log.Println("Wrote output to:", outputZipPath)
+	log.Info("Zip Process - Finished")
+	log.Info("Wrote archive to:", outputZipPath)
+	log.Info("Please upload this archive (`upload.zip`) to the Veracode Platform")
 }
 
-func zipSource(source, target string, testsPath string) error {
+func checkForPotentialSmells(source string) {
+	doesPackageLockJsonExist := false
+
+	err := filepath.Walk(source, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return nil
+		}
+
+		// check for the `package-lock.json`
+		if strings.HasSuffix(path, "package-lock.json") && !strings.Contains(path, "node_modules") {
+			doesPackageLockJsonExist = true
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		log.Error(err)
+	}
+
+	if !doesPackageLockJsonExist {
+		log.Warn("No `package-lock.json` file found.. (This is required for Veracode SCA, if you use NPM)")
+	}
+}
+
+func zipSource(source string, target string, testsPath string) error {
 	// 1. Create a ZIP file and zip.Writer
 	f, err := os.Create(target)
 	if err != nil {
@@ -148,7 +180,7 @@ func isRequired(path string, testsPath string) bool {
 func isNodeModules(path string) bool {
 	if strings.Contains(path, "node_modules") {
 		if !didPrintNodeModulesMsg {
-			log.Println("Ignoring the entire `node_modules` folder")
+			log.Info("Ignoring the entire `node_modules` folder")
 			didPrintNodeModulesMsg = true
 		}
 
@@ -161,7 +193,7 @@ func isNodeModules(path string) bool {
 func isTestFile(path string, testsPath string) bool {
 	if strings.Contains(path, testsPath) {
 		if !didPrintTestsMsg {
-			log.Printf("Ignoring the entire content of the `%s` folder (contains test files)", testsPath)
+			log.Info("Ignoring the entire content of the `%s` folder (contains test files)", testsPath)
 			didPrintTestsMsg = true
 		}
 
@@ -174,7 +206,7 @@ func isTestFile(path string, testsPath string) bool {
 func isStyleSheet(path string) bool {
 	if strings.HasSuffix(path, ".css") || strings.HasSuffix(path, ".scss") {
 		if !didPrintStylesheetsMsg {
-			log.Println("Ignoring style sheets (such as `.css`)")
+			log.Info("Ignoring style sheets (such as `.css`)")
 			didPrintStylesheetsMsg = true
 		}
 
@@ -190,7 +222,7 @@ func isImage(path string) bool {
 	for _, element := range imageExtensions {
 		if strings.HasSuffix(path, element) {
 			if !didPrintImagesMsg {
-				log.Println("Ignoring images (such as `.jpg`)")
+				log.Info("Ignoring images (such as `.jpg`)")
 				didPrintImagesMsg = true
 			}
 
@@ -207,7 +239,7 @@ func isDocument(path string) bool {
 	for _, element := range documentExtensions {
 		if strings.HasSuffix(path, element) {
 			if !didPrintDocumentsMsg {
-				log.Println("Ignoring documents (such as `.pdf`)")
+				log.Info("Ignoring documents (such as `.pdf`)")
 				didPrintDocumentsMsg = true
 			}
 
@@ -221,7 +253,7 @@ func isDocument(path string) bool {
 func isGitFolder(path string) bool {
 	if strings.Contains(path, ".git") {
 		if !didPrintGitFolderMsg {
-			log.Println("Ignoring `.git`")
+			log.Info("Ignoring `.git`")
 			didPrintGitFolderMsg = true
 		}
 
