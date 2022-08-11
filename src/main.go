@@ -128,7 +128,14 @@ func isNodeModules(path string) bool {
 }
 
 func isStyleSheet(path string) bool {
+	if strings.HasSuffix(path, ".css") || strings.HasSuffix(path, ".scss") {
+		if !didPrintStylesheetsMsg {
+			log.Println("Ignoring style sheets")
+			didPrintStylesheetsMsg = true
+		}
 
-	didPrintStylesheetsMsg = true
+		return true
+	}
+
 	return false
 }
