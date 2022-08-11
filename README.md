@@ -10,12 +10,12 @@ Please feel free to extend the existing functionality, followed by a `Merge Requ
 ## Built-in Help
 Help is built-in!
 
-- `node-packager --help` - outputs the help.
+- `vc-node-packager --help` - outputs the help.
 
 # How to Use
 ```text
 Usage:
-    node-packager [flags]
+    vc-node-packager [flags]
 
 Flags:
   -source string     The path of the Node.js app you want to package (default "sample-node-project")
