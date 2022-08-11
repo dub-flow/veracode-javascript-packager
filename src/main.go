@@ -12,6 +12,7 @@ import (
 
 // flag to make sure a message is only logged once
 var didPrintNodeModulesMsg bool = false
+var didPrintTestsMsg bool = false
 var didPrintStylesheetsMsg bool = false
 var didPrintImagesMsg bool = false
 var didPrintDocumentsMsg bool = false
@@ -19,17 +20,22 @@ var didPrintGitFolderMsg bool = false
 
 func main() {
 	// parse all the command line flags
-	sourcePtr := flag.String("source", "sample-node-project", "the path of the Node.js app you want to package")
-	targetPtr := flag.String("target", ".", "the path where you want the output.zip to be stored to")
+	sourcePtr := flag.String("source", "sample-node-project", "The path of the Node.js app you want to package")
+	targetPtr := flag.String("target", ".", "The path where you want the output.zip to be stored to")
+	testsPtr := flag.String("tests", "test", "The path that contains your Node.js test files (relative to the source)")
 	flag.Parse()
 
 	outputZipPath := *targetPtr + "/output.zip"
+	testsPath := *sourcePtr + "/" + *testsPtr + "/"
 
-	log.Println("Node Packager - Started")
+	log.Println("Veracode Node Packager - Started")
 	log.Println("Source directory to zip up:", *sourcePtr)
-	log.Println("Zip Process - Started")
+	log.Println("Test directory (its content will be omitted):", testsPath)
+	log.Println("Zip Process - Started...")
 
-	if err := zipSource(*sourcePtr, outputZipPath); err != nil {
+	// NOTE: Search for `package-lock.json` file
+
+	if err := zipSource(*sourcePtr, outputZipPath, testsPath); err != nil {
 		log.Fatal(err)
 	}
 
@@ -37,7 +43,7 @@ func main() {
 	log.Println("Wrote output to:", outputZipPath)
 }
 
-func zipSource(source, target string) error {
+func zipSource(source, target string, testsPath string) error {
 	// 1. Create a ZIP file and zip.Writer
 	f, err := os.Create(target)
 	if err != nil {
@@ -70,7 +76,7 @@ func zipSource(source, target string) error {
 		}
 
 		// check if the path is required for the upload (otherwise, it will be omitted)
-		if !isRequired(header.Name) {
+		if !isRequired(header.Name, testsPath) {
 			return nil
 		}
 
@@ -99,9 +105,14 @@ func zipSource(source, target string) error {
 	})
 }
 
-func isRequired(path string) bool {
+func isRequired(path string, testsPath string) bool {
 	// check for the `node_modules` folder
 	if isNodeModules(path) {
+		return false
+	}
+
+	// check if it is a `test` path (i.e., a file that e.g. contains unit tests)
+	if isTestFile(path, testsPath) {
 		return false
 	}
 
@@ -125,11 +136,11 @@ func isRequired(path string) bool {
 		return false
 	}
 
-    // check for the "misc" not required stuff
+	// check for the "misc" not required stuff
 	if isMiscNotRequiredFile(path) {
 		return false
 	}
-    
+
 	// the default is to not omit the file
 	return true
 }
@@ -137,8 +148,21 @@ func isRequired(path string) bool {
 func isNodeModules(path string) bool {
 	if strings.Contains(path, "node_modules") {
 		if !didPrintNodeModulesMsg {
-			log.Println("Ignoring `node_modules`")
+			log.Println("Ignoring the entire `node_modules` folder")
 			didPrintNodeModulesMsg = true
+		}
+
+		return true
+	}
+
+	return false
+}
+
+func isTestFile(path string, testsPath string) bool {
+	if strings.Contains(path, testsPath) {
+		if !didPrintTestsMsg {
+			log.Printf("Ignoring the entire content of the `%s` folder (contains test files)", testsPath)
+			didPrintTestsMsg = true
 		}
 
 		return true
@@ -150,7 +174,7 @@ func isNodeModules(path string) bool {
 func isStyleSheet(path string) bool {
 	if strings.HasSuffix(path, ".css") || strings.HasSuffix(path, ".scss") {
 		if !didPrintStylesheetsMsg {
-			log.Println("Ignoring style sheets")
+			log.Println("Ignoring style sheets (such as `.css`)")
 			didPrintStylesheetsMsg = true
 		}
 
@@ -166,7 +190,7 @@ func isImage(path string) bool {
 	for _, element := range imageExtensions {
 		if strings.HasSuffix(path, element) {
 			if !didPrintImagesMsg {
-				log.Println("Ignoring images")
+				log.Println("Ignoring images (such as `.jpg`)")
 				didPrintImagesMsg = true
 			}
 
@@ -183,7 +207,7 @@ func isDocument(path string) bool {
 	for _, element := range documentExtensions {
 		if strings.HasSuffix(path, element) {
 			if !didPrintDocumentsMsg {
-				log.Println("Ignoring documents")
+				log.Println("Ignoring documents (such as `.pdf`)")
 				didPrintDocumentsMsg = true
 			}
 

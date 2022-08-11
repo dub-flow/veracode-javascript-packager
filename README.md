@@ -16,8 +16,9 @@ Usage:
     node-packager [flags]
 
 Flags:
-  -source string     The path of the Node.js app you want to package (default "../test-projects/my-node-test")
+  -source string     The path of the Node.js app you want to package (default "sample-node-project")
   -target string     The path where you want the output.zip to be stored to (default ".")
+  -tests string      The path that contains your Node.js test files (relative to the source) (default "test")
 ```
 
 # Setup
@@ -28,14 +29,11 @@ Flags:
 # What does it do?
 - Creates a zip of the `-source` folder and puts it into the provided `-target` directory as `upload.zip`
 - `Features`:
-    - Omit `node_modules`
+    - Omit the `node_modules` folder (usually only contains 3rd party libraries)
+    - Omit the `tests` directory (that contains e.g. your unit- and integration tests)
+        - Specified via `-test <path>`
     - Omit style sheets (`.css` and `.scss` files)
-    - Omit popular image extensions (e.g. `.jpg`, `.png`) 
-    - Omit popular document extensions (e.g. `.pdf`)
-    - Omit `.git` folder
+    - Omit images (e.g. `.jpg`, `.png`) 
+    - Omit documents (e.g. `.pdf`)
+    - Omit the `.git` folder
     - Omit other not-required files (e.g. `.DS_Store`)
-
-# Upcoming Features (hopefully)
-- Omit `test` folder
-- Omit `public` folder 
-
