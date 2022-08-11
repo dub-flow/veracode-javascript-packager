@@ -22,3 +22,9 @@ test-projects
 
 # The built binary
 node-packager
+
+# Debug stuff
+__debug_bin
+
+# The output ZIP file
+output.zip
