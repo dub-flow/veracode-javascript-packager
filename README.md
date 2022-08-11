@@ -21,11 +21,6 @@ Flags:
   -tests string      The path that contains your Node.js test files (relative to the source) (default "test")
 ```
 
-# Setup
-- You can simply run it from source via `go run src/main.go` 
-- How to build..
-- Releases?
-
 # What does it do?
 - Creates a zip of the `-source` folder and puts it into the provided `-target` directory as `upload.zip`
 - `Features`:
@@ -37,3 +32,9 @@ Flags:
     - Omit documents (e.g. `.pdf`)
     - Omit the `.git` folder
     - Omit other not-required files (e.g. `.DS_Store`)
+
+
+# Setup
+- You can simply run it from source via `go run main.go` 
+- How to build..
+- Releases?
