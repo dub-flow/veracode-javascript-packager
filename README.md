@@ -5,6 +5,8 @@ Please note that this is **not an official Veracode project**, not supported by 
 
 There also is a `sample-node-project` folder that contains a "Hello World"-ish `Node.js` application with a lot of the files that we want to filter out. This test project can be used to take `Veracode Node Packager` for a spin.
 
+Please feel free to extend the existing functionality, followed by a `Merge Request`.
+
 ## Built-in Help
 Help is built-in!
 
