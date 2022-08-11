@@ -28,7 +28,7 @@ Flags:
 - `Features`: 
     - This tool creates a zip of your application ready to be uploaded to the Veracode Platform
     - It prevents common, non-required, files from being a part of the zip (such as `node_modules`, `tests`)
-    - The tool also checks for "smells" that indicates something might not right with the packaging, and prints corresponding warnings if a "smell" was found
+    - The tool also checks for "smells" that indicate something might not be right with the packaging, and prints corresponding warnings/errors if a "smell" was found
 - `Files to be omitted`:
     - Omit the `node_modules` folder (usually only contains 3rd party libraries)
     - Omit the `tests` directory (that contains e.g. your unit- and integration tests)
