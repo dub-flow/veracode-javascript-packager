@@ -9,11 +9,6 @@ Help is built-in!
 
 - `node-packager --help` - outputs the help.
 
-# Installation
-- Via `go run src/main.go`
-- How to build..
-- Releases?
-
 # How to Run
 ```text
 Usage:
@@ -24,8 +19,13 @@ Flags:
   -target string     The path where you want the output.zip to be stored to (default ".")
 ```
 
+# Installation
+- Via `go run src/main.go`
+- How to build..
+- Releases?
+
 # What does it do?
-- Creates a zip of a source folder (`-source <path>`) and puts it into the provided target directory (`-target <path>`) as `upload.zip`
+- Creates a zip of the `-source` folder and puts it into the provided `-target` directory as `upload.zip`
 - `Features`:
     - Omit `node_modules`
     - Omit `.css` and `.scss` files
@@ -34,8 +34,3 @@ Flags:
     - Omit images
     - Omit `test` folder
     - Omit `public` folder 
-
-
-# Test Projects
-- To test this packager, we have used `The node.js example app` from `https://github.com/contentful/the-example-app.nodejs`
-- After downloading it `npm install`
