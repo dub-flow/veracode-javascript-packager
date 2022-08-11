@@ -29,24 +29,24 @@ Flags:
     - This tool creates a zip of your application ready to be uploaded to the Veracode Platform
     - It prevents common, non-required, files from being a part of the zip (such as `node_modules`, `tests`)
     - The tool also checks for "smells" that indicate something might not be right with the packaging, and prints corresponding warnings/errors if a "smell" was found
-- `Files to be omitted`:
+- `Omitted Files/Folders`:
     - Omit the `node_modules` folder (usually only contains 3rd party libraries)
     - Omit the `tests` directory (that contains e.g. your unit- and integration tests)
-        - Specified via `-test <path>`
+        - Specified via `-tests <path>`
     - Omit style sheets (`.css` and `.scss` files)
     - Omit images (e.g. `.jpg`, `.png`) 
     - Omit documents (e.g. `.pdf`)
     - Omit the `.git` folder
-    - Omit other not-required files (e.g. `.DS_Store`)
+    - Omit other non-required files (e.g. `.DS_Store`)
 - `Additional Checks`:
     - Check if `package-lock.json` exists (this is required for Veracode SCA)
-    - Check if `public` exists (may contain resources that are not part of your source code)
-    - Check if `dist` exists (may contain resources that are not part of your source code)
+    - Check if `/public` exists (may contain resources that are not part of your actual 1st party source code)
+    - Check if `/dist` exists (may contain resources that are not part of your actual 1st party source code)
     - Check for `.map` files (indicates that your JS files might be minified)
 
 # Setup
-- You can simply run it from source via `go run main.go` 
-- You can build the project yourself simply via `go build`
+- You can simply run this tool from source via `go run main.go` 
+- You can build the tool yourself via `go build`
 
 # Releases
 - The `/releases` folder contains some binary releases already so that you might not have to build it yourself
