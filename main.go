@@ -37,8 +37,8 @@ func main() {
 	log.Info("Checking for \"smells\" that indicate packaging issues - Done")
 
 	log.Info("Creating a Zip while omitting non-required files - Started...")
-	log.Info("Source directory to zip up:", *sourcePtr)
-	log.Info("Test directory (its content will be omitted):", testsPath)
+	log.Info("Source directory to zip up: ", *sourcePtr)
+	log.Info("Test directory (its content will be omitted): ", testsPath)
 
 	// generate the zip file, and omit all non-required files
 	if err := zipSource(*sourcePtr, outputZipPath, testsPath); err != nil {
@@ -46,12 +46,13 @@ func main() {
 	}
 
 	log.Info("Zip Process - Finished")
-	log.Info("Wrote archive to:", outputZipPath)
+	log.Info("Wrote archive to: ", outputZipPath)
 	log.Info("Please upload this archive (`upload.zip`) to the Veracode Platform")
 }
 
 func checkForPotentialSmells(source string) {
 	doesPackageLockJsonExist := false
+	doesMapFileExist := false
 
 	err := filepath.Walk(source, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -63,6 +64,15 @@ func checkForPotentialSmells(source string) {
 			doesPackageLockJsonExist = true
 		}
 
+		// check for `.map` files
+		if strings.HasSuffix(path, ".map") && !strings.Contains(path, "node_modules") {
+			doesMapFileExist = true
+		}
+
+		// check for `public` directory
+
+		// check for `dist` directory
+
 		return nil
 	})
 
@@ -71,7 +81,13 @@ func checkForPotentialSmells(source string) {
 	}
 
 	if !doesPackageLockJsonExist {
-		log.Warn("No `package-lock.json` file found.. (This is required for Veracode SCA, if you use NPM)")
+		log.Warn("No `package-lock.json` file found.. (This file is required for Veracode SCA)")
+		log.Warn("You may not receive Veracode SCA results")
+	}
+
+	if doesMapFileExist {
+		log.Warn("The 1st party code contains `.map` files (which indicates minified JavaScript)...")
+		log.Warn("Please pass a directory to this tool that contains the unminified/unbundled/unconcatenated JavaScript (or TypeScript)")
 	}
 }
 
@@ -193,7 +209,7 @@ func isNodeModules(path string) bool {
 func isTestFile(path string, testsPath string) bool {
 	if strings.Contains(path, testsPath) {
 		if !didPrintTestsMsg {
-			log.Info("Ignoring the entire content of the `%s` folder (contains test files)", testsPath)
+			log.Info("Ignoring the entire content of the `" + testsPath + "` folder (contains test files)")
 			didPrintTestsMsg = true
 		}
 
