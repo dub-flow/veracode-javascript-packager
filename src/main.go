@@ -19,13 +19,11 @@ var didPrintGitFolderMsg bool = false
 
 func main() {
 	// parse all the command line flags
-	sourcePtr := flag.String("source", "../test-projects/my-node-test", "the path of the Node.js app you want to package")
+	sourcePtr := flag.String("source", "sample-node-project", "the path of the Node.js app you want to package")
 	targetPtr := flag.String("target", ".", "the path where you want the output.zip to be stored to")
 	flag.Parse()
 
 	outputZipPath := *targetPtr + "/output.zip"
-	// folderToZip := "test-projects/my-node-test" // "../test-projects/the-example-app.nodejs-master"
-	// outputZip := "output.zip"
 
 	log.Println("Node Packager - Started")
 	log.Println("Source directory to zip up:", *sourcePtr)
@@ -102,7 +100,7 @@ func zipSource(source, target string) error {
 }
 
 func isRequired(path string) bool {
-	// check for `node_modules`
+	// check for the `node_modules` folder
 	if isNodeModules(path) {
 		return false
 	}
@@ -122,11 +120,16 @@ func isRequired(path string) bool {
 		return false
 	}
 
-	// check for ``.git`` folder
+	// check for the `.git` folder
 	if isGitFolder(path) {
 		return false
 	}
 
+    // check for the "misc" not required stuff
+	if isMiscNotRequiredFile(path) {
+		return false
+	}
+    
 	// the default is to not omit the file
 	return true
 }
@@ -199,6 +202,19 @@ func isGitFolder(path string) bool {
 		}
 
 		return true
+	}
+
+	return false
+}
+
+func isMiscNotRequiredFile(path string) bool {
+	notRequiredSuffices := [1]string{".DS_Store"}
+
+	for _, element := range notRequiredSuffices {
+		if strings.HasSuffix(path, element) {
+			// NOTE: At the moment, these "misc" files aren't logged to avoid logging too much
+			return true
+		}
 	}
 
 	return false

@@ -3,13 +3,14 @@ The Veracode Node Packager is a tool that packages your `Node.js` application fo
 
 Please note that this is **not an official Veracode project**, not supported by Veracode in any form, and comes with no warranty whatsoever. It is simply a little pet project of mine trying to make the life of Veracode's `Node.js` customers a bit easier. Use at your own risk.
 
-## Built-in Help
+There also is a `sample-node-project` folder that contains a "Hello World"-ish `Node.js` application with a lot of the files that we want to filter out. This test project can be used to take `Veracode Node Packager` for a spin.
 
+## Built-in Help
 Help is built-in!
 
 - `node-packager --help` - outputs the help.
 
-# How to Run
+# How to Use
 ```text
 Usage:
     node-packager [flags]
@@ -19,8 +20,8 @@ Flags:
   -target string     The path where you want the output.zip to be stored to (default ".")
 ```
 
-# Installation
-- Via `go run src/main.go`
+# Setup
+- You can simply run it from source via `go run src/main.go` 
 - How to build..
 - Releases?
 
@@ -32,8 +33,9 @@ Flags:
     - Omit popular image extensions (e.g. `.jpg`, `.png`) 
     - Omit popular document extensions (e.g. `.pdf`)
     - Omit `.git` folder
+    - Omit other not-required files (e.g. `.DS_Store`)
 
 # Upcoming Features (hopefully)
-    - Omit `test` folder
-    - Omit `public` folder 
-    - Omit `.DS_Store` file
+- Omit `test` folder
+- Omit `public` folder 
+
