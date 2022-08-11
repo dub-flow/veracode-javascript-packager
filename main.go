@@ -29,12 +29,16 @@ func main() {
 	outputZipPath := *targetPtr + "/output.zip"
 	testsPath := *sourcePtr + "/" + *testsPtr + "/"
 
-	log.Info("Veracode Node Packager - Started")
+	log.Info("##########################################")
+	log.Info("#                                        #")
+	log.Info("#   Veracode Node Packager (Unofficial)  #")
+	log.Info("#                                        #")
+	log.Info("##########################################" + "\n\n")
 
 	// check for some "smells" (e.g. the `package-lock.json` file is missing), and print corresponding warnings/errors
 	log.Info("Checking for \"smells\" that indicate packaging issues - Started...")
 	checkForPotentialSmells(*sourcePtr)
-	log.Info("Checking for \"smells\" that indicate packaging issues - Done")
+	log.Info("\"Smells\" Check - Done")
 
 	log.Info("Creating a Zip while omitting non-required files - Started...")
 	log.Info("Source directory to zip up: ", *sourcePtr)
@@ -45,7 +49,7 @@ func main() {
 		log.Error(err)
 	}
 
-	log.Info("Zip Process - Finished")
+	log.Info("Zip Process - Done")
 	log.Info("Wrote archive to: ", outputZipPath)
 	log.Info("Please upload this archive (`upload.zip`) to the Veracode Platform")
 }
