@@ -304,7 +304,7 @@ func isGitFolder(path string) bool {
 }
 
 func isMiscNotRequiredFile(path string) bool {
-	notRequiredSuffices := [1]string{".DS_Store"}
+	notRequiredSuffices := [2]string{".DS_Store", "__MACOSX"}
 
 	for _, element := range notRequiredSuffices {
 		if strings.HasSuffix(path, element) {
