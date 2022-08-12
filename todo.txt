@@ -1,6 +1,5 @@
 - Create a documentation.. This was before, this is the output
 - Explain the code smells we are looking for, why we don't want them (why we don't want `node_modules`)
-- This will override `output.zip`.. do you wish to continue
 
 - Maybe ignore map files in `public`
     - Maybe remove `public` and `dist`?

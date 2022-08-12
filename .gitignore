@@ -5,7 +5,7 @@
 __debug_bin
 
 # The output ZIP file
-output.zip
+vc-output.zip
 
 # 3rd party libraries
 vendor

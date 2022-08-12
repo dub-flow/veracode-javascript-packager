@@ -22,11 +22,11 @@ var didPrintGitFolderMsg bool = false
 func main() {
 	// parse all the command line flags
 	sourcePtr := flag.String("source", "sample-node-project", "The path of the Node.js app you want to package")
-	targetPtr := flag.String("target", ".", "The path where you want the output.zip to be stored to")
+	targetPtr := flag.String("target", ".", "The path where you want the vc-output.zip to be stored to")
 	testsPtr := flag.String("tests", "test", "The path that contains your Node.js test files (relative to the source)")
 	flag.Parse()
 
-	outputZipPath := filepath.Join(*targetPtr, "output.zip")
+	outputZipPath := filepath.Join(*targetPtr, "vc-output.zip")
 	testsPath := filepath.Join(*sourcePtr, *testsPtr)
 
 	log.Info("##########################################")
@@ -51,7 +51,7 @@ func main() {
 
 	log.Info("Zip Process - Done")
 	log.Info("Wrote archive to: ", outputZipPath)
-	log.Info("Please upload this archive (`upload.zip`) to the Veracode Platform")
+	log.Info("Please upload this archive to the Veracode Platform")
 }
 
 func checkForPotentialSmells(source string) {
@@ -76,13 +76,13 @@ func checkForPotentialSmells(source string) {
 		}
 
 		if info.IsDir() {
-			// check for `public` directory
-			if strings.HasSuffix(path, string(os.PathSeparator)+"public") && !strings.Contains(path, "node_modules") {
+			// check for `/public` directory
+			if strings.HasSuffix(path, string(os.PathSeparator) + "public") && !strings.Contains(path, "node_modules") {
 				doesPublicExist = true
 			}
 
-			// check for `dist` directory
-			if strings.HasSuffix(path, string(os.PathSeparator)+"dist") && !strings.Contains(path, "node_modules") {
+			// check for `/dist` directory
+			if strings.HasSuffix(path, string(os.PathSeparator) + "dist") && !strings.Contains(path, "node_modules") {
 				doesDistExist = true
 			}
 		}

@@ -19,7 +19,7 @@ Usage:
 
 Flags:
   -source string     The path of the Node.js app you want to package (default "sample-node-project")
-  -target string     The path where you want the output.zip to be stored to (default ".")
+  -target string     The path where you want the vc-output.zip to be stored to (default ".")
   -tests string      The path that contains your Node.js test files (relative to the source) (default "test")
 ```
 
