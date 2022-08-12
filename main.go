@@ -75,14 +75,16 @@ func checkForPotentialSmells(source string) {
 			doesMapFileExist = true
 		}
 
-		// check for `public` directory
-		if strings.Contains(path, "public") && !strings.Contains(path, "node_modules") {
-			doesPublicExist = true
-		}
+		if info.IsDir() {
+			// check for `public` directory
+			if strings.HasSuffix(path, string(os.PathSeparator)+"public") && !strings.Contains(path, "node_modules") {
+				doesPublicExist = true
+			}
 
-		// check for `dist` directory
-		if strings.Contains(path, "dist") && !strings.Contains(path, "node_modules") {
-			doesDistExist = true
+			// check for `dist` directory
+			if strings.HasSuffix(path, string(os.PathSeparator)+"dist") && !strings.Contains(path, "node_modules") {
+				doesDistExist = true
+			}
 		}
 
 		return nil
@@ -103,12 +105,12 @@ func checkForPotentialSmells(source string) {
 	}
 
 	if doesPublicExist {
-		log.Warn("The `public` folder exists..  This folder can likely be omitted")
+		log.Warn("The `/public` folder exists..  This folder can likely be omitted")
 		log.Warn("Please verify if the `public` folder contains any actual source code and, if not, please omit it before calling this tool here")
 	}
 
 	if doesDistExist {
-		log.Warn("The `dist` folder exists.. This folder can likely be omitted")
+		log.Warn("The `/dist` folder exists.. This folder can likely be omitted")
 		log.Warn("Please verify if the `dist` folder contains any actual source code and, if not, please omit it before calling this tool here")
 	}
 }
