@@ -49,4 +49,4 @@ Flags:
 - You can build the tool yourself via `go build`
 
 # Releases
-- The `/releases` folder contains some binary releases already so that you might not have to build it yourself
+- The `Releases` section contains some binary releases already so that you might not have to build it yourself
