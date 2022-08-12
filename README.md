@@ -24,7 +24,7 @@ Flags:
 ```
 
 # What does it do?
-- Creates a zip of the `-source` folder and puts it into the provided `-target` directory as `upload.zip`
+- Creates a zip of the `-source` folder and puts it into the provided `-target` directory as `vc-output.zip`
 - `Features`: 
     - This tool creates a zip of your application ready to be uploaded to the Veracode Platform
     - It prevents common, non-required, files from being a part of the zip (such as `node_modules`, `tests`)
