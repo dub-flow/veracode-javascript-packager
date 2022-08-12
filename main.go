@@ -26,8 +26,8 @@ func main() {
 	testsPtr := flag.String("tests", "test", "The path that contains your Node.js test files (relative to the source)")
 	flag.Parse()
 
-	outputZipPath := *targetPtr + "/output.zip"
-	testsPath := *sourcePtr + "/" + *testsPtr + "/"
+	outputZipPath := filepath.Join(*targetPtr, "output.zip")
+	testsPath := filepath.Join(*sourcePtr, *testsPtr)
 
 	log.Info("##########################################")
 	log.Info("#                                        #")
@@ -36,9 +36,9 @@ func main() {
 	log.Info("##########################################" + "\n\n")
 
 	// check for some "smells" (e.g. the `package-lock.json` file is missing), and print corresponding warnings/errors
-	log.Info("Checking for \"smells\" that indicate packaging issues - Started...")
+	log.Info("Checking for 'smells' that indicate packaging issues - Started...")
 	checkForPotentialSmells(*sourcePtr)
-	log.Info("\"Smells\" Check - Done")
+	log.Info("'Smells' Check - Done")
 
 	log.Info("Creating a Zip while omitting non-required files - Started...")
 	log.Info("Source directory to zip up: ", *sourcePtr)
@@ -76,12 +76,12 @@ func checkForPotentialSmells(source string) {
 		}
 
 		// check for `public` directory
-		if strings.Contains(path, "/public") && !strings.Contains(path, "node_modules") {
+		if strings.Contains(path, "public") && !strings.Contains(path, "node_modules") {
 			doesPublicExist = true
 		}
 
 		// check for `dist` directory
-		if strings.Contains(path, "/dist") && !strings.Contains(path, "node_modules") {
+		if strings.Contains(path, "dist") && !strings.Contains(path, "node_modules") {
 			doesDistExist = true
 		}
 
