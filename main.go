@@ -27,7 +27,7 @@ func main() {
 	flag.Parse()
 
 	outputZipPath := filepath.Join(*targetPtr, "vc-output.zip")
-	testsPath := filepath.Join(*sourcePtr, *testsPtr)
+	testsPath := *testsPtr
 
 	log.Info("##########################################")
 	log.Info("#                                        #")
