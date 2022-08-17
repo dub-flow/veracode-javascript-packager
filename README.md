@@ -41,7 +41,7 @@ Flags:
 - `Additional Checks`:
     - Check if `package-lock.json` exists (this is required for Veracode SCA)
     - Check if `/public` exists (may contain resources that are not part of your actual 1st party source code)
-    - Check if `/dist` exists (may contain resources that are not part of your actual 1st party source code)
+    - Check if `/dist` exists (may contain minified JavaScript)
     - Check for `.map` files (indicates that your JS files might be minified)
 
 # Setup
