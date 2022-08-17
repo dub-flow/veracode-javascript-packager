@@ -11,7 +11,11 @@ vc-output.zip
 vendor
 
 releases
+vc-node-packager
 
 # the Dockerfile is not ready for release yet
 Dockerfile
 docker_notes.txt
+
+# PowerPoint stuff
+~$demo.pptx
