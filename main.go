@@ -5,6 +5,7 @@ import (
 	"flag"
 	"io"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 
@@ -27,7 +28,9 @@ func main() {
 	flag.Parse()
 
 	outputZipPath := filepath.Join(*targetPtr, "vc-output.zip")
-	testsPath := *testsPtr
+	// combine that last segment of the `sourcePtr`` with the value provided via `-test`.
+	// Example: If `-test mytests` and `-source /some/node-project`, then `testsPath` will be: "node-project/mytests"
+	testsPath := filepath.Join(path.Base(*sourcePtr), *testsPtr)
 
 	log.Info("##########################################")
 	log.Info("#                                        #")
