@@ -12,7 +12,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// flag to make sure a message is only logged once
+// flags to make sure a message is only logged once
 var didPrintNodeModulesMsg bool = false
 var didPrintTestsMsg bool = false
 var didPrintDefaultTestExtensionsMsg bool = false
@@ -64,7 +64,7 @@ func main() {
 }
 
 func checkForPotentialSmells(source string) {
-	doesPackageLockJsonExist := false
+	doesSCAFileExist := false
 	doesMapFileExist := false
 	doesPublicExist := false
 	doesDistExist := false
@@ -74,25 +74,33 @@ func checkForPotentialSmells(source string) {
 			return nil
 		}
 
-		// check for the `package-lock.json`
-		if strings.HasSuffix(path, "package-lock.json") && !strings.Contains(path, "node_modules") {
-			doesPackageLockJsonExist = true
-		}
-
-		// check for `.map` files
-		if strings.HasSuffix(path, ".map") && !strings.Contains(path, "node_modules") {
-			doesMapFileExist = true
-		}
-
-		if info.IsDir() {
-			// check for `/public` directory
-			if strings.HasSuffix(path, string(os.PathSeparator)+"public") && !strings.Contains(path, "node_modules") {
-				doesPublicExist = true
+		// only do checks for first party code
+		if !strings.Contains(path, "node_modules") && !strings.Contains(path, "bower_components") {
+			// check for the `package-lock.json`, `yarn.lock` or `bower.json` (required for SCA)
+			if !doesSCAFileExist {
+				packageManagerFiles := [3]string{"package-lock.json", "yarn.lock", "bower.json"}
+				for _, element := range packageManagerFiles {
+					if strings.HasSuffix(path, element) {
+						doesSCAFileExist = true
+					}
+				}
 			}
 
-			// check for `/dist` directory
-			if strings.HasSuffix(path, string(os.PathSeparator)+"dist") && !strings.Contains(path, "node_modules") {
-				doesDistExist = true
+			// check for `.map` files
+			if strings.HasSuffix(path, ".map") {
+				doesMapFileExist = true
+			}
+
+			if info.IsDir() {
+				// check for `/public` directory
+				if strings.HasSuffix(path, string(os.PathSeparator)+"public") {
+					doesPublicExist = true
+				}
+
+				// check for `/dist` directory
+				if strings.HasSuffix(path, string(os.PathSeparator)+"dist") {
+					doesDistExist = true
+				}
 			}
 		}
 
@@ -103,8 +111,8 @@ func checkForPotentialSmells(source string) {
 		log.Error(err)
 	}
 
-	if !doesPackageLockJsonExist {
-		log.Error("No `package-lock.json` file found.. (This file is required for Veracode SCA)")
+	if !doesSCAFileExist {
+		log.Error("No `package-lock.json` or `yarn.lock` or `bower.json` file found.. (This file is required for Veracode SCA)")
 		log.Error("You may not receive Veracode SCA results")
 	}
 
@@ -278,13 +286,14 @@ func isTestFile(path string, testsPath string) bool {
 }
 
 func isCommonTest(path string) bool {
-	testExtensions := [2]string{".spec.ts", ".test.tsx"}
+	testExtensions := [3]string{".spec.ts", ".test.tsx", ".spec.js"}
 	for _, element := range testExtensions {
 		if strings.HasSuffix(path, element) {
 			if !didPrintDefaultTestExtensionsMsg {
 				log.Info("Ignoring common test extensions (such as `.spec.ts`)")
 				didPrintDefaultTestExtensionsMsg = true
 			}
+
 			return true
 		}
 	}
