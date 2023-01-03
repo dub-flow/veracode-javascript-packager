@@ -26,6 +26,7 @@ var didPrintIdesMsg bool = false
 var didPrintBuildMsg bool = false
 var didPrintDbsMsg bool = false
 var didPrintGitFolderMsg bool = false
+var didPrintBowerComponentsMsg bool = false
 
 func main() {
 	// parse all the command line flags
@@ -213,6 +214,11 @@ func isRequired(path string, testsPath string) bool {
 		return false
 	}
 
+	// check for the `bower_components` folder
+	if isBowerComponents(path) {
+		return false
+	}
+
 	// check if it is a `test` path (i.e., a file that e.g. contains unit tests)
 	if isInTestFolder(path, testsPath) {
 		return false
@@ -277,6 +283,19 @@ func isNodeModules(path string) bool {
 		if !didPrintNodeModulesMsg {
 			log.Info("\tIgnoring the entire `node_modules` folder")
 			didPrintNodeModulesMsg = true
+		}
+
+		return true
+	}
+
+	return false
+}
+
+func isBowerComponents(path string) bool {
+	if strings.Contains(path, "bower_components") {
+		if !didPrintBowerComponentsMsg {
+			log.Info("\tIgnoring the entire `bower_components` folder")
+			didPrintBowerComponentsMsg = true
 		}
 
 		return true
