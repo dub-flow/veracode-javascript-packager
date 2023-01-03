@@ -3,6 +3,4 @@
 
 - Add it to the NPM registry
 - Add functionality to explicitly include certain files that my packager excludes (sample use case: `node_modules` may contain 2nd party code)
-- Include a date and output something like `vc-output-<date>.zip`
-- No default value for `-tests` anymore 
 - Test Angular, Vue, and React project and rename to "Veracode JavaScript Packager" and update README that it includes Node, Angular, React and Vue

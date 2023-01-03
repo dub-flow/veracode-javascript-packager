@@ -8,6 +8,7 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
+	"time"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -39,13 +40,16 @@ func main() {
 	log.Info("#                                        #")
 	log.Info("##########################################" + "\n\n")
 
-	outputZipPath := filepath.Join(*targetPtr, "vc-output.zip")
-	var testsPath string
+	// add the current date to the output zip name, like e.g. "2023-Jan-04"
+	currentTime := time.Now()
+	outputZipPath := filepath.Join(*targetPtr, "vc-output_"+currentTime.Format("2006-Jan-02")+".zip")
 
 	// echo the provided flags
+	var testsPath string
 	log.Info("Provided Flags:")
 	log.Info("\t`-source` directory to zip up: ", *sourcePtr)
 	log.Info("\t`-target` directory for the output: ", *targetPtr)
+
 	if *testsPtr == "" {
 		log.Info("\tNo `-test` directory was provided... Heuristics will be used to identify (and omit) common test directory names" + "\n\n")
 		testsPath = ""
