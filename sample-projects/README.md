@@ -3,7 +3,7 @@
 * This folder contains example apps for the supported frameworks
     - The project for Node.js was created by us and should contain quite a lot of edge cases
     - The other projects are "real-world" examples from `GitHub`
-* For testing, you may want to install them by running `npm install` within each of them
+* For testing, you may want to install them by running `npm install` within each of them (and `yarn install` for the `./sample-vue-project`)
 
 ## Credits
 
