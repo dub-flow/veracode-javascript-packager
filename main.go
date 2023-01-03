@@ -33,24 +33,26 @@ func main() {
 	testsPtr := flag.String("tests", "", "The path that contains your Node.js test files (relative to the source)")
 	flag.Parse()
 
-	outputZipPath := filepath.Join(*targetPtr, "vc-output.zip")
-	// combine that last segment of the `sourcePtr`` with the value provided via `-test`.
-	// Example: If `-test mytests` and `-source /some/node-project`, then `testsPath` will be: "node-project/mytests"
-	testsPath := filepath.Join(path.Base(*sourcePtr), *testsPtr)
-
 	log.Info("##########################################")
 	log.Info("#                                        #")
 	log.Info("#   Veracode Node Packager (Unofficial)  #")
 	log.Info("#                                        #")
 	log.Info("##########################################" + "\n\n")
 
+	outputZipPath := filepath.Join(*targetPtr, "vc-output.zip")
+	var testsPath string
+
 	// echo the provided flags
 	log.Info("Provided Flags:")
-	log.Info("\t `-source` directory to zip up: ", *sourcePtr)
-	log.Info("\t `-target` directory for the output: ", *targetPtr)
+	log.Info("\t`-source` directory to zip up: ", *sourcePtr)
+	log.Info("\t`-target` directory for the output: ", *targetPtr)
 	if *testsPtr == "" {
 		log.Info("\tNo `-test` directory was provided... Heuristics will be used to identify (and omit) common test directory names" + "\n\n")
+		testsPath = ""
 	} else {
+		// combine that last segment of the `sourcePtr`` with the value provided via `-test`.
+		// Example: If `-test mytests` and `-source /some/node-project`, then `testsPath` will be: "node-project/mytests"
+		testsPath = filepath.Join(path.Base(*sourcePtr), *testsPtr)
 		log.Info("\tProvided `-test` directory (its content will be omitted): ", testsPath, "\n\n")
 	}
 
@@ -208,12 +210,7 @@ func isRequired(path string, testsPath string) bool {
 	}
 
 	// check if it is a `test` path (i.e., a file that e.g. contains unit tests)
-	if isTestFile(path, testsPath) {
-		return false
-	}
-
-	// check for common `test`
-	if isCommonTest(path) {
+	if isInTestFolder(path, testsPath) {
 		return false
 	}
 
@@ -257,6 +254,11 @@ func isRequired(path string, testsPath string) bool {
 		return false
 	}
 
+	// check for common test files (like .spec.js)
+	if isTestFile(path) {
+		return false
+	}
+
 	// check for the "misc" not required stuff
 	if isMiscNotRequiredFile(path) {
 		return false
@@ -279,7 +281,14 @@ func isNodeModules(path string) bool {
 	return false
 }
 
-func isTestFile(path string, testsPath string) bool {
+func isInTestFolder(path string, testsPath string) bool {
+	// Test folders are treated as follows:
+	// 	- if `-tests` is provided, then only the provided path will be treated as a test directory (and thus, excluded)
+	// 	- if `-tests` is not provided, then `isCommonTest()` will be called to exclude common test folders
+	if testsPath == "" {
+		return isCommonTestFolder(path)
+	}
+
 	if strings.Contains(path, testsPath) {
 		if !didPrintTestsMsg {
 			log.Info("\tIgnoring the entire content of the `" + testsPath + "` folder (contains test files)")
@@ -292,25 +301,31 @@ func isTestFile(path string, testsPath string) bool {
 	return false
 }
 
-func isCommonTest(path string) bool {
-	testExtensions := [3]string{".spec.ts", ".test.tsx", ".spec.js"}
-	for _, element := range testExtensions {
-		if strings.HasSuffix(path, element) {
-			if !didPrintDefaultTestExtensionsMsg {
-				log.Info("\tIgnoring common test extensions (such as `.spec.ts`)")
-				didPrintDefaultTestExtensionsMsg = true
+func isCommonTestFolder(path string) bool {
+	testPaths := [3]string{"test", "e2e", "__tests__"}
+
+	for _, element := range testPaths {
+		if strings.Contains(path, element) {
+			if !didPrintDefaultTestFoldersMsg {
+				log.Info("\tIgnoring common test folders (such as `e2e`)")
+				didPrintDefaultTestFoldersMsg = true
 			}
 
 			return true
 		}
 	}
 
-	testPaths := [3]string{"test", "e2e", "__tests__"}
-	for _, element := range testPaths {
-		if strings.Contains(path, element) {
-			if !didPrintDefaultTestFoldersMsg {
-				log.Info("\tIgnoring common test folders (such as `e2e`)")
-				didPrintDefaultTestFoldersMsg = true
+	return false
+}
+
+func isTestFile(path string) bool {
+	testExtensions := [3]string{".spec.ts", ".test.tsx", ".spec.js"}
+
+	for _, element := range testExtensions {
+		if strings.HasSuffix(path, element) {
+			if !didPrintDefaultTestExtensionsMsg {
+				log.Info("\tIgnoring common test extensions (such as `.spec.ts`)")
+				didPrintDefaultTestExtensionsMsg = true
 			}
 
 			return true
