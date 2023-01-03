@@ -418,7 +418,7 @@ func isFont(path string) bool {
 }
 
 func isGitFolder(path string) bool {
-	if strings.Contains(path, ".git") {
+	if strings.HasSuffix(path, ".git") {
 		if !didPrintGitFolderMsg {
 			log.Info("\tIgnoring `.git`")
 			didPrintGitFolderMsg = true
