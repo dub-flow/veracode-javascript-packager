@@ -126,13 +126,13 @@ func checkForPotentialSmells(source string) {
 	}
 
 	if !doesSCAFileExist {
-		log.Error("\tNo `package-lock.json` or `yarn.lock` or `bower.json` file found.. (This file is required for Veracode SCA)")
-		log.Error("\tYou may not receive Veracode SCA results")
+		log.Warn("\tNo `package-lock.json` or `yarn.lock` or `bower.json` file found.. (This file is required for Veracode SCA)")
+		log.Warn("\tYou may not receive Veracode SCA results")
 	}
 
 	if doesMapFileExist {
-		log.Error("\tThe 1st party code contains `.map` files (which indicates minified JavaScript)...")
-		log.Error("\tPlease pass a directory to this tool that contains the unminified/unbundled/unconcatenated JavaScript (or TypeScript)")
+		log.Warn("\tThe 1st party code contains `.map` files (which indicates minified JavaScript)...")
+		log.Warn("\tPlease pass a directory to this tool that contains the unminified/unbundled/unconcatenated JavaScript (or TypeScript)")
 	}
 
 	if doesPublicExist {
@@ -209,18 +209,18 @@ func zipSource(source string, target string, testsPath string) error {
 }
 
 func isRequired(path string, testsPath string) bool {
-	// check for the `node_modules` folder
-	if isNodeModules(path) {
-		return false
-	}
-
-	// check for the `bower_components` folder
-	if isBowerComponents(path) {
+	// check for the `node_modules` and `bower_components` folders
+	if isNodeModules(path) || isBowerComponents(path) {
 		return false
 	}
 
 	// check if it is a `test` path (i.e., a file that e.g. contains unit tests)
 	if isInTestFolder(path, testsPath) {
+		return false
+	}
+
+	// check for common test files (like .spec.js)
+	if isTestFile(path) {
 		return false
 	}
 
@@ -261,11 +261,6 @@ func isRequired(path string, testsPath string) bool {
 
 	// check for IDE folder (like .code, .idea)
 	if isIdeFolder(path) {
-		return false
-	}
-
-	// check for common test files (like .spec.js)
-	if isTestFile(path) {
 		return false
 	}
 

@@ -10,7 +10,7 @@
 __debug_bin
 
 # The output ZIP file
-vc-output.zip
+*.zip
 
 # 3rd party libraries
 vendor
