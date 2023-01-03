@@ -28,9 +28,9 @@ var didPrintGitFolderMsg bool = false
 
 func main() {
 	// parse all the command line flags
-	sourcePtr := flag.String("source", "sample-node-project", "The path of the Node.js app you want to package")
+	sourcePtr := flag.String("source", "./sample-projects/sample-node-project", "The path of the Node.js app you want to package")
 	targetPtr := flag.String("target", ".", "The path where you want the vc-output.zip to be stored to")
-	testsPtr := flag.String("tests", "test", "The path that contains your Node.js test files (relative to the source)")
+	testsPtr := flag.String("tests", "", "The path that contains your Node.js test files (relative to the source)")
 	flag.Parse()
 
 	outputZipPath := filepath.Join(*targetPtr, "vc-output.zip")
@@ -44,15 +44,22 @@ func main() {
 	log.Info("#                                        #")
 	log.Info("##########################################" + "\n\n")
 
+	// echo the provided flags
+	log.Info("Provided Flags:")
+	log.Info("\t `-source` directory to zip up: ", *sourcePtr)
+	log.Info("\t `-target` directory for the output: ", *targetPtr)
+	if *testsPtr == "" {
+		log.Info("\tNo `-test` directory was provided... Heuristics will be used to identify (and omit) common test directory names" + "\n\n")
+	} else {
+		log.Info("\tProvided `-test` directory (its content will be omitted): ", testsPath, "\n\n")
+	}
+
 	// check for some "smells" (e.g. the `package-lock.json` file is missing), and print corresponding warnings/errors
 	log.Info("Checking for 'smells' that indicate packaging issues - Started...")
 	checkForPotentialSmells(*sourcePtr)
-	log.Info("'Smells' Check - Done")
+	log.Info("'Smells' Check - Done\n\n")
 
 	log.Info("Creating a Zip while omitting non-required files - Started...")
-	log.Info("Source directory to zip up: ", *sourcePtr)
-	log.Info("Test directory (its content will be omitted): ", testsPath)
-
 	// generate the zip file, and omit all non-required files
 	if err := zipSource(*sourcePtr, outputZipPath, testsPath); err != nil {
 		log.Error(err)
@@ -112,23 +119,23 @@ func checkForPotentialSmells(source string) {
 	}
 
 	if !doesSCAFileExist {
-		log.Error("No `package-lock.json` or `yarn.lock` or `bower.json` file found.. (This file is required for Veracode SCA)")
-		log.Error("You may not receive Veracode SCA results")
+		log.Error("\tNo `package-lock.json` or `yarn.lock` or `bower.json` file found.. (This file is required for Veracode SCA)")
+		log.Error("\tYou may not receive Veracode SCA results")
 	}
 
 	if doesMapFileExist {
-		log.Error("The 1st party code contains `.map` files (which indicates minified JavaScript)...")
-		log.Error("Please pass a directory to this tool that contains the unminified/unbundled/unconcatenated JavaScript (or TypeScript)")
+		log.Error("\tThe 1st party code contains `.map` files (which indicates minified JavaScript)...")
+		log.Error("\tPlease pass a directory to this tool that contains the unminified/unbundled/unconcatenated JavaScript (or TypeScript)")
 	}
 
 	if doesPublicExist {
-		log.Warn("The `/public` folder exists..  This folder can likely be omitted")
-		log.Warn("Please verify if the `public` folder contains any actual source code and, if not, please omit it before calling this tool here")
+		log.Warn("\tThe `/public` folder exists..  This folder can likely be omitted")
+		log.Warn("\tPlease verify if the `public` folder contains any actual source code and, if not, please omit it before calling this tool here")
 	}
 
 	if doesDistExist {
-		log.Warn("The `/dist` folder exists.. This folder can likely be omitted")
-		log.Warn("Please verify if the `dist` folder contains any actual source code and, if not, please omit it before calling this tool here")
+		log.Warn("\tThe `/dist` folder exists.. This folder can likely be omitted")
+		log.Warn("\tPlease verify if the `dist` folder contains any actual source code and, if not, please omit it before calling this tool here")
 	}
 }
 
@@ -262,7 +269,7 @@ func isRequired(path string, testsPath string) bool {
 func isNodeModules(path string) bool {
 	if strings.Contains(path, "node_modules") {
 		if !didPrintNodeModulesMsg {
-			log.Info("Ignoring the entire `node_modules` folder")
+			log.Info("\tIgnoring the entire `node_modules` folder")
 			didPrintNodeModulesMsg = true
 		}
 
@@ -275,7 +282,7 @@ func isNodeModules(path string) bool {
 func isTestFile(path string, testsPath string) bool {
 	if strings.Contains(path, testsPath) {
 		if !didPrintTestsMsg {
-			log.Info("Ignoring the entire content of the `" + testsPath + "` folder (contains test files)")
+			log.Info("\tIgnoring the entire content of the `" + testsPath + "` folder (contains test files)")
 			didPrintTestsMsg = true
 		}
 
@@ -290,7 +297,7 @@ func isCommonTest(path string) bool {
 	for _, element := range testExtensions {
 		if strings.HasSuffix(path, element) {
 			if !didPrintDefaultTestExtensionsMsg {
-				log.Info("Ignoring common test extensions (such as `.spec.ts`)")
+				log.Info("\tIgnoring common test extensions (such as `.spec.ts`)")
 				didPrintDefaultTestExtensionsMsg = true
 			}
 
@@ -302,7 +309,7 @@ func isCommonTest(path string) bool {
 	for _, element := range testPaths {
 		if strings.Contains(path, element) {
 			if !didPrintDefaultTestFoldersMsg {
-				log.Info("Ignoring common test folders (such as `e2e`)")
+				log.Info("\tIgnoring common test folders (such as `e2e`)")
 				didPrintDefaultTestFoldersMsg = true
 			}
 
@@ -316,7 +323,7 @@ func isCommonTest(path string) bool {
 func isStyleSheet(path string) bool {
 	if strings.HasSuffix(path, ".css") || strings.HasSuffix(path, ".scss") {
 		if !didPrintStylesheetsMsg {
-			log.Info("Ignoring style sheets (such as `.css`)")
+			log.Info("\tIgnoring style sheets (such as `.css`)")
 			didPrintStylesheetsMsg = true
 		}
 
@@ -332,7 +339,7 @@ func isImage(path string) bool {
 	for _, element := range imageExtensions {
 		if strings.HasSuffix(path, element) {
 			if !didPrintImagesMsg {
-				log.Info("Ignoring images (such as `.jpg`)")
+				log.Info("\tIgnoring images (such as `.jpg`)")
 				didPrintImagesMsg = true
 			}
 
@@ -349,7 +356,7 @@ func isDocument(path string) bool {
 	for _, element := range documentExtensions {
 		if strings.HasSuffix(path, element) {
 			if !didPrintDocumentsMsg {
-				log.Info("Ignoring documents (such as `.pdf`)")
+				log.Info("\tIgnoring documents (such as `.pdf`)")
 				didPrintDocumentsMsg = true
 			}
 
@@ -366,7 +373,7 @@ func isFont(path string) bool {
 	for _, element := range fontExtensions {
 		if strings.HasSuffix(path, element) {
 			if !didPrintFontsMsg {
-				log.Info("Ignoring fonts (such as `.woff`)")
+				log.Info("\tIgnoring fonts (such as `.woff`)")
 				didPrintFontsMsg = true
 			}
 
@@ -380,7 +387,7 @@ func isFont(path string) bool {
 func isGitFolder(path string) bool {
 	if strings.Contains(path, ".git") {
 		if !didPrintGitFolderMsg {
-			log.Info("Ignoring `.git`")
+			log.Info("\tIgnoring `.git`")
 			didPrintGitFolderMsg = true
 		}
 
@@ -396,7 +403,7 @@ func isDb(path string) bool {
 	for _, element := range documentExtensions {
 		if strings.HasSuffix(path, element) {
 			if !didPrintDbsMsg {
-				log.Info("Ignoring dbs (such as `.sqlite3`)")
+				log.Info("\tIgnoring dbs (such as `.sqlite3`)")
 				didPrintDbsMsg = true
 			}
 
@@ -410,7 +417,7 @@ func isDb(path string) bool {
 func isBuildFolder(path string) bool {
 	if strings.Contains(path, "build") {
 		if !didPrintBuildMsg {
-			log.Info("Ignoring `build` folder")
+			log.Info("\tIgnoring `build` folder")
 			didPrintBuildMsg = true
 		}
 
@@ -426,7 +433,7 @@ func isIdeFolder(path string) bool {
 	for _, element := range idePaths {
 		if strings.Contains(path, element) {
 			if !didPrintIdesMsg {
-				log.Info("Ignoring IDE folder (such as .code, .idea)")
+				log.Info("\tIgnoring IDE folder (such as .code, .idea)")
 				didPrintIdesMsg = true
 			}
 
