@@ -2,3 +2,5 @@
 - Add functionality to explicitly include certain files that my packager excludes (sample use case: `node_modules` may contain 2nd party code)
 - Test Angular, Vue, and React project and rename to "Veracode JavaScript Packager" and update README that it includes Node, Angular, React and Vue
 - Remove all .json that are not bower.json, package.json, package-lock.json
+
+- Add all new features to the feature documentation in the README.md

@@ -1,26 +1,26 @@
-# Veracode Node Packager - Alpha Version
-Please note that this is **not an official Veracode project**, not supported by Veracode in any form, and comes with no warranty whatsoever. It is simply a little pet project of mine trying to make the life of Veracode's `Node.js` customers a bit easier. Use at your own risk.
+# Veracode JavaScript Packager - Beta Version
+Please note that this is **not an official Veracode project**, not supported by Veracode in any form, and comes with no warranty whatsoever. It is simply a little pet project of mine trying to make the life of Veracode's `JavaScript` customers a bit easier. Use at your own risk.
 
-The Veracode Node Packager is a tool that packages your `Node.js` application for `Veracode Static Analysis`. The idea is to avoid common mistakes that I, in my role as a Veracode Application Security Consultant, commonly see in customer uploads.
+The `Veracode JavaScript Packager` is a tool that packages your `JavaScript` applications (i.e., `Node.js`, `Angular`, `React`, or `Vue`) for `Veracode Static Analysis`. The idea is to avoid common mistakes that I, in my role as a Veracode Application Security Consultant, commonly see in customer uploads.
 
-There also is a `sample-node-project` folder that contains a "Hello World"-ish `Node.js` application with a lot of the files that we want to filter out. This test project can be used to take `Veracode Node Packager` for a spin.
+There also is a set of sample applications (in `./sample-projects`) that can be used to test to take this tool for a spin.
 
 Please feel free to extend the existing functionality, followed by a `Merge Request`.
 
 ## Built-in Help
 Help is built-in!
 
-- `vc-node-packager --help` - outputs the help.
+- `veracode-js-packager --help` - outputs the help.
 
 # How to Use
 ```text
 Usage:
-    vc-node-packager [flags]
+    veracode-js-packager [flags]
 
 Flags:
-  -source string     The path of the Node.js app you want to package (default "sample-node-project")
+  -source string     The path of the JavaScript app you want to package (default "sample-node-project")
   -target string     The path where you want the vc-output.zip to be stored to (default ".")
-  -tests string      The path that contains your Node.js test files (relative to the source) (default "test")
+  -tests string      The path that contains your test files (relative to the source) (default ""). Use as heuristic to identify tests if no path is provided
 ```
 
 # What does it do?
