@@ -252,7 +252,7 @@ func isRequired(path string, testsPath string) bool {
 }
 
 func isNodeModules(path string) bool {
-	if strings.Contains(path, "node_modules") {
+	if strings.Contains(path, string(os.PathSeparator)+"node_modules") {
 		if !didPrintNodeModulesMsg {
 			log.Info("\tIgnoring the entire `node_modules` folder")
 			didPrintNodeModulesMsg = true
@@ -265,7 +265,7 @@ func isNodeModules(path string) bool {
 }
 
 func isBowerComponents(path string) bool {
-	if strings.Contains(path, "bower_components") {
+	if strings.Contains(path, string(os.PathSeparator)+"bower_components") {
 		if !didPrintBowerComponentsMsg {
 			log.Info("\tIgnoring the entire `bower_components` folder")
 			didPrintBowerComponentsMsg = true
@@ -285,7 +285,7 @@ func isInTestFolder(path string, testsPath string) bool {
 		return isCommonTestFolder(path)
 	}
 
-	if strings.Contains(path, testsPath) {
+	if strings.Contains(path, string(os.PathSeparator)+testsPath) {
 		if !didPrintTestsMsg {
 			log.Info("\tIgnoring the entire content of the `" + testsPath + "` folder (contains test files)")
 			didPrintTestsMsg = true
@@ -301,7 +301,7 @@ func isCommonTestFolder(path string) bool {
 	testPaths := [3]string{"test", "e2e", "__tests__"}
 
 	for _, element := range testPaths {
-		if strings.Contains(path, element) {
+		if strings.Contains(path, string(os.PathSeparator)+element) {
 			if !didPrintDefaultTestFoldersMsg {
 				log.Info("\tIgnoring common test folders (such as `e2e`)")
 				didPrintDefaultTestFoldersMsg = true
@@ -396,7 +396,7 @@ func isFont(path string) bool {
 }
 
 func isGitFolder(path string) bool {
-	if strings.HasSuffix(path, ".git") {
+	if strings.HasSuffix(path, string(os.PathSeparator)+".git") {
 		if !didPrintGitFolderMsg {
 			log.Info("\tIgnoring `.git`")
 			didPrintGitFolderMsg = true
@@ -426,7 +426,7 @@ func isDb(path string) bool {
 }
 
 func isBuildFolder(path string) bool {
-	if strings.Contains(path, "build") {
+	if strings.Contains(path, string(os.PathSeparator)+"build") {
 		if !didPrintBuildMsg {
 			log.Info("\tIgnoring `build` folder")
 			didPrintBuildMsg = true
@@ -439,7 +439,7 @@ func isBuildFolder(path string) bool {
 }
 
 func isDistFolder(path string) bool {
-	if strings.Contains(path, "dist") {
+	if strings.Contains(path, string(os.PathSeparator)+"dist") {
 		if !didPrintDistMsg {
 			log.Info("\tIgnoring `dist` folder")
 			didPrintDistMsg = true
@@ -452,7 +452,7 @@ func isDistFolder(path string) bool {
 }
 
 func isPublicFolder(path string) bool {
-	if strings.Contains(path, "public") {
+	if strings.Contains(path, string(os.PathSeparator)+"public") {
 		if !didPrintPublicMsg {
 			log.Info("\tIgnoring `build` folder")
 			didPrintPublicMsg = true
@@ -468,7 +468,7 @@ func isIdeFolder(path string) bool {
 	idePaths := [2]string{".vscode", ".idea"}
 
 	for _, element := range idePaths {
-		if strings.Contains(path, element) {
+		if strings.Contains(path, string(os.PathSeparator)+element) {
 			if !didPrintIdesMsg {
 				log.Info("\tIgnoring IDE folder (such as .code, .idea)")
 				didPrintIdesMsg = true
