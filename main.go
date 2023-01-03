@@ -24,6 +24,8 @@ var didPrintDocumentsMsg bool = false
 var didPrintFontsMsg bool = false
 var didPrintIdesMsg bool = false
 var didPrintBuildMsg bool = false
+var didPrintPublicMsg bool = false
+var didPrintDistMsg bool = false
 var didPrintDbsMsg bool = false
 var didPrintGitFolderMsg bool = false
 var didPrintBowerComponentsMsg bool = false
@@ -80,8 +82,6 @@ func main() {
 func checkForPotentialSmells(source string) {
 	doesSCAFileExist := false
 	doesMapFileExist := false
-	doesPublicExist := false
-	doesDistExist := false
 
 	err := filepath.Walk(source, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -104,18 +104,6 @@ func checkForPotentialSmells(source string) {
 			if strings.HasSuffix(path, ".map") {
 				doesMapFileExist = true
 			}
-
-			if info.IsDir() {
-				// check for `/public` directory
-				if strings.HasSuffix(path, string(os.PathSeparator)+"public") {
-					doesPublicExist = true
-				}
-
-				// check for `/dist` directory
-				if strings.HasSuffix(path, string(os.PathSeparator)+"dist") {
-					doesDistExist = true
-				}
-			}
 		}
 
 		return nil
@@ -133,16 +121,6 @@ func checkForPotentialSmells(source string) {
 	if doesMapFileExist {
 		log.Warn("\tThe 1st party code contains `.map` files (which indicates minified JavaScript)...")
 		log.Warn("\tPlease pass a directory to this tool that contains the unminified/unbundled/unconcatenated JavaScript (or TypeScript)")
-	}
-
-	if doesPublicExist {
-		log.Warn("\tThe `/public` folder exists..  This folder can likely be omitted")
-		log.Warn("\tPlease verify if the `public` folder contains any actual source code and, if not, please omit it before calling this tool here")
-	}
-
-	if doesDistExist {
-		log.Warn("\tThe `/dist` folder exists.. This folder can likely be omitted")
-		log.Warn("\tPlease verify if the `dist` folder contains any actual source code and, if not, please omit it before calling this tool here")
 	}
 }
 
@@ -254,8 +232,8 @@ func isRequired(path string, testsPath string) bool {
 		return false
 	}
 
-	// check for the `build` folder
-	if isBuildFolder(path) {
+	// check for the `build`, `dist` and `public` folders
+	if isBuildFolder(path) || isDistFolder(path) || isPublicFolder(path) {
 		return false
 	}
 
@@ -460,6 +438,32 @@ func isBuildFolder(path string) bool {
 	return false
 }
 
+func isDistFolder(path string) bool {
+	if strings.Contains(path, "dist") {
+		if !didPrintDistMsg {
+			log.Info("\tIgnoring `dist` folder")
+			didPrintDistMsg = true
+		}
+
+		return true
+	}
+
+	return false
+}
+
+func isPublicFolder(path string) bool {
+	if strings.Contains(path, "public") {
+		if !didPrintPublicMsg {
+			log.Info("\tIgnoring `build` folder")
+			didPrintPublicMsg = true
+		}
+
+		return true
+	}
+
+	return false
+}
+
 func isIdeFolder(path string) bool {
 	idePaths := [2]string{".vscode", ".idea"}
 
@@ -478,7 +482,7 @@ func isIdeFolder(path string) bool {
 }
 
 func isMiscNotRequiredFile(path string) bool {
-	notRequiredSuffices := [2]string{".DS_Store", "__MACOSX"}
+	notRequiredSuffices := [3]string{".DS_Store", "__MACOSX", ".gitignore"}
 
 	for _, element := range notRequiredSuffices {
 		if strings.HasSuffix(path, element) {
