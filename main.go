@@ -15,9 +15,15 @@ import (
 // flag to make sure a message is only logged once
 var didPrintNodeModulesMsg bool = false
 var didPrintTestsMsg bool = false
+var didPrintDefaultTestExtensionsMsg bool = false
+var didPrintDefaultTestFoldersMsg bool = false
 var didPrintStylesheetsMsg bool = false
 var didPrintImagesMsg bool = false
 var didPrintDocumentsMsg bool = false
+var didPrintFontsMsg bool = false
+var didPrintIdesMsg bool = false
+var didPrintBuildMsg bool = false
+var didPrintDbsMsg bool = false
 var didPrintGitFolderMsg bool = false
 
 func main() {
@@ -80,12 +86,12 @@ func checkForPotentialSmells(source string) {
 
 		if info.IsDir() {
 			// check for `/public` directory
-			if strings.HasSuffix(path, string(os.PathSeparator) + "public") && !strings.Contains(path, "node_modules") {
+			if strings.HasSuffix(path, string(os.PathSeparator)+"public") && !strings.Contains(path, "node_modules") {
 				doesPublicExist = true
 			}
 
 			// check for `/dist` directory
-			if strings.HasSuffix(path, string(os.PathSeparator) + "dist") && !strings.Contains(path, "node_modules") {
+			if strings.HasSuffix(path, string(os.PathSeparator)+"dist") && !strings.Contains(path, "node_modules") {
 				doesDistExist = true
 			}
 		}
@@ -191,6 +197,11 @@ func isRequired(path string, testsPath string) bool {
 		return false
 	}
 
+	// check for common `test`
+	if isCommonTest(path) {
+		return false
+	}
+
 	// check for style sheets (.css and .scss)
 	if isStyleSheet(path) {
 		return false
@@ -206,8 +217,28 @@ func isRequired(path string, testsPath string) bool {
 		return false
 	}
 
+	// check for fonts (like .woff)
+	if isFont(path) {
+		return false
+	}
+
 	// check for the `.git` folder
 	if isGitFolder(path) {
+		return false
+	}
+
+	// check for the dbs (like .db, .sqlite3)
+	if isDb(path) {
+		return false
+	}
+
+	// check for the `build` folder
+	if isBuildFolder(path) {
+		return false
+	}
+
+	// check for IDE folder (like .code, .idea)
+	if isIdeFolder(path) {
 		return false
 	}
 
@@ -246,6 +277,33 @@ func isTestFile(path string, testsPath string) bool {
 	return false
 }
 
+func isCommonTest(path string) bool {
+	testExtensions := [2]string{".spec.ts", ".test.tsx"}
+	for _, element := range testExtensions {
+		if strings.HasSuffix(path, element) {
+			if !didPrintDefaultTestExtensionsMsg {
+				log.Info("Ignoring common test extensions (such as `.spec.ts`)")
+				didPrintDefaultTestExtensionsMsg = true
+			}
+			return true
+		}
+	}
+
+	testPaths := [3]string{"test", "e2e", "__tests__"}
+	for _, element := range testPaths {
+		if strings.Contains(path, element) {
+			if !didPrintDefaultTestFoldersMsg {
+				log.Info("Ignoring common test folders (such as `e2e`)")
+				didPrintDefaultTestFoldersMsg = true
+			}
+
+			return true
+		}
+	}
+
+	return false
+}
+
 func isStyleSheet(path string) bool {
 	if strings.HasSuffix(path, ".css") || strings.HasSuffix(path, ".scss") {
 		if !didPrintStylesheetsMsg {
@@ -260,7 +318,7 @@ func isStyleSheet(path string) bool {
 }
 
 func isImage(path string) bool {
-	imageExtensions := [6]string{".jpg", ".png", ".jpeg", ".gif", ".svg", ".bmp"}
+	imageExtensions := [8]string{".jpg", ".png", ".jpeg", ".gif", ".svg", ".bmp", ".ico", ".icns"}
 
 	for _, element := range imageExtensions {
 		if strings.HasSuffix(path, element) {
@@ -293,6 +351,23 @@ func isDocument(path string) bool {
 	return false
 }
 
+func isFont(path string) bool {
+	fontExtensions := [4]string{".ttf", ".otf", ".woff", ".woff2"}
+
+	for _, element := range fontExtensions {
+		if strings.HasSuffix(path, element) {
+			if !didPrintFontsMsg {
+				log.Info("Ignoring fonts (such as `.woff`)")
+				didPrintFontsMsg = true
+			}
+
+			return true
+		}
+	}
+
+	return false
+}
+
 func isGitFolder(path string) bool {
 	if strings.Contains(path, ".git") {
 		if !didPrintGitFolderMsg {
@@ -301,6 +376,53 @@ func isGitFolder(path string) bool {
 		}
 
 		return true
+	}
+
+	return false
+}
+
+func isDb(path string) bool {
+	documentExtensions := [6]string{".db", ".db3", ".sdb", ".sqlite", ".sqlite2", ".sqlite3"}
+
+	for _, element := range documentExtensions {
+		if strings.HasSuffix(path, element) {
+			if !didPrintDbsMsg {
+				log.Info("Ignoring dbs (such as `.sqlite3`)")
+				didPrintDbsMsg = true
+			}
+
+			return true
+		}
+	}
+
+	return false
+}
+
+func isBuildFolder(path string) bool {
+	if strings.Contains(path, "build") {
+		if !didPrintBuildMsg {
+			log.Info("Ignoring `build` folder")
+			didPrintBuildMsg = true
+		}
+
+		return true
+	}
+
+	return false
+}
+
+func isIdeFolder(path string) bool {
+	idePaths := [2]string{".vscode", ".idea"}
+
+	for _, element := range idePaths {
+		if strings.Contains(path, element) {
+			if !didPrintIdesMsg {
+				log.Info("Ignoring IDE folder (such as .code, .idea)")
+				didPrintIdesMsg = true
+			}
+
+			return true
+		}
 	}
 
 	return false
