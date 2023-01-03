@@ -20,7 +20,8 @@ Usage:
 Flags:
   -source string     The path of the JavaScript app you want to package (default "sample-node-project")
   -target string     The path where you want the vc-output.zip to be stored to (default ".")
-  -tests string      The path that contains your test files (relative to the source) (default ""). Use as heuristic to identify tests if no path is provided
+  -tests string      The path that contains your test files (relative to the source) (default "").  Uses a heuristic to identifiy tests automatically in case no path is provided
+  
 ```
 
 # What does it do?

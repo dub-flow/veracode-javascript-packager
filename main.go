@@ -32,16 +32,16 @@ var didPrintBowerComponentsMsg bool = false
 
 func main() {
 	// parse all the command line flags
-	sourcePtr := flag.String("source", "./sample-projects/sample-node-project", "The path of the Node.js app you want to package")
+	sourcePtr := flag.String("source", "./sample-projects/sample-node-project", "The path of the JavaScript app you want to package")
 	targetPtr := flag.String("target", ".", "The path where you want the vc-output.zip to be stored to")
-	testsPtr := flag.String("tests", "", "The path that contains your Node.js test files (relative to the source)")
+	testsPtr := flag.String("tests", "", "The path that contains your test files (relative to the source). Uses a heuristic to identifiy tests automatically in case no path is provided")
 	flag.Parse()
 
-	log.Info("##########################################")
-	log.Info("#                                        #")
-	log.Info("#   Veracode Node Packager (Unofficial)  #")
-	log.Info("#                                        #")
-	log.Info("##########################################" + "\n\n")
+	log.Info("#################################################")
+	log.Info("#                                               #")
+	log.Info("#   Veracode JavaScript Packager (Unofficial)   #")
+	log.Info("#                                               #")
+	log.Info("#################################################" + "\n\n")
 
 	// add the current date to the output zip name, like e.g. "2023-Jan-04"
 	currentTime := time.Now()
