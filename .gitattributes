@@ -1,3 +1,4 @@
+# Exclude these file extensions from the GitHub language statistics
 *.js linguist-vendored
 *.ts linguist-vendored
 *.html linguist-vendored
