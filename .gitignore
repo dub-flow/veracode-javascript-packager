@@ -16,7 +16,7 @@ __debug_bin
 vendor
 
 releases
-vc-node-packager
+veracode-js-packager
 
 # the Dockerfile is not ready for release yet
 Dockerfile

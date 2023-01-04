@@ -1,4 +1,4 @@
-module vc-node-packager
+module veracode-js-packager
 
 go 1.17
 
