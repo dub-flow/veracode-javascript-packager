@@ -217,7 +217,12 @@ func IsFont(path string) bool {
 
 // check for the `.git` folder
 func IsGitFolder(path string) bool {
-	if strings.HasSuffix(path, string(os.PathSeparator)+".git") {
+	// checks for the ".git" folder itself, i.e. for a path that ends with `/.git`
+	// ... or for files within the ".git" folder, i.e. for a path that contains `/.git/`
+	gitFolderPath := string(os.PathSeparator) + ".git"
+	fileInGitFolderPath := gitFolderPath + string(os.PathSeparator)
+
+	if strings.HasSuffix(path, gitFolderPath) || strings.Contains(path, fileInGitFolderPath) {
 		if !didPrintGitFolderMsg {
 			log.Info("\tIgnoring `.git`")
 			didPrintGitFolderMsg = true
