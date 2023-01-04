@@ -25,6 +25,7 @@ var didPrintGitFolderMsg bool = false
 var didPrintBowerComponentsMsg bool = false
 var didPrintVideoMsg bool = false
 
+// check for the `node_modules` folder
 func IsNodeModules(path string) bool {
 	if strings.Contains(path, string(os.PathSeparator)+"node_modules") {
 		if !didPrintNodeModulesMsg {
@@ -38,6 +39,7 @@ func IsNodeModules(path string) bool {
 	return false
 }
 
+// check for the `bower_components` folder
 func IsBowerComponents(path string) bool {
 	if strings.Contains(path, string(os.PathSeparator)+"bower_components") {
 		if !didPrintBowerComponentsMsg {
@@ -51,6 +53,7 @@ func IsBowerComponents(path string) bool {
 	return false
 }
 
+// check if it is a `test` path (i.e., a file that e.g. contains unit tests)
 func IsInTestFolder(path string, testsPath string) bool {
 	// Test folders are treated as follows:
 	// 	- if `-tests` is provided, then only the provided path will be treated as a test directory (and thus, excluded)
@@ -88,6 +91,7 @@ func IsCommonTestFolder(path string) bool {
 	return false
 }
 
+// check for common test files (like .spec.js)
 func IsTestFile(path string) bool {
 	testExtensions := [3]string{".spec.ts", ".test.tsx", ".spec.js"}
 
@@ -105,6 +109,7 @@ func IsTestFile(path string) bool {
 	return false
 }
 
+// check for style sheets (like .css and .scss)
 func IsStyleSheet(path string) bool {
 	if strings.HasSuffix(path, ".css") || strings.HasSuffix(path, ".scss") {
 		if !didPrintStylesheetsMsg {
@@ -118,6 +123,7 @@ func IsStyleSheet(path string) bool {
 	return false
 }
 
+// check for images (like .jpg, .png, .jpeg)
 func IsImage(path string) bool {
 	imageExtensions := [8]string{".jpg", ".png", ".jpeg", ".gif", ".svg", ".bmp", ".ico", ".icns"}
 
@@ -135,6 +141,7 @@ func IsImage(path string) bool {
 	return false
 }
 
+// check for documents (like .pdf, .md)
 func IsDocument(path string) bool {
 	// inspired by https://en.wikipedia.org/wiki/List_of_Microsoft_Office_filename_extensions (and additionally `.md`)
 	documentExtensions := [38]string{
@@ -162,6 +169,7 @@ func IsDocument(path string) bool {
 	return false
 }
 
+// check for video files
 func IsVideo(path string) bool {
 	// inspired by this list: https://en.wikipedia.org/wiki/Video_file_format
 	videoExtensions := [18]string{
@@ -183,6 +191,7 @@ func IsVideo(path string) bool {
 	return false
 }
 
+// check for fonts (like .woff)
 func IsFont(path string) bool {
 	fontExtensions := [4]string{".ttf", ".otf", ".woff", ".woff2"}
 
@@ -200,6 +209,7 @@ func IsFont(path string) bool {
 	return false
 }
 
+// check for the `.git` folder
 func IsGitFolder(path string) bool {
 	if strings.HasSuffix(path, string(os.PathSeparator)+".git") {
 		if !didPrintGitFolderMsg {
@@ -213,6 +223,7 @@ func IsGitFolder(path string) bool {
 	return false
 }
 
+// check for the dbs (like .db, .sqlite3)
 func IsDb(path string) bool {
 	documentExtensions := [6]string{".db", ".db3", ".sdb", ".sqlite", ".sqlite2", ".sqlite3"}
 
@@ -230,6 +241,7 @@ func IsDb(path string) bool {
 	return false
 }
 
+// check for the `build` folder
 func IsBuildFolder(path string) bool {
 	if strings.Contains(path, string(os.PathSeparator)+"build") {
 		if !didPrintBuildMsg {
@@ -243,6 +255,7 @@ func IsBuildFolder(path string) bool {
 	return false
 }
 
+// check for the `dist` folder
 func IsDistFolder(path string) bool {
 	if strings.Contains(path, string(os.PathSeparator)+"dist") {
 		if !didPrintDistMsg {
@@ -256,6 +269,7 @@ func IsDistFolder(path string) bool {
 	return false
 }
 
+// check for the `public` folder
 func IsPublicFolder(path string) bool {
 	if strings.Contains(path, string(os.PathSeparator)+"public") {
 		if !didPrintPublicMsg {
@@ -269,6 +283,7 @@ func IsPublicFolder(path string) bool {
 	return false
 }
 
+// check for IDE folder (like .code, .idea)
 func IsIdeFolder(path string) bool {
 	idePaths := [2]string{".vscode", ".idea"}
 
@@ -286,6 +301,7 @@ func IsIdeFolder(path string) bool {
 	return false
 }
 
+// check for the "misc" not required stuff
 func IsMiscNotRequiredFile(path string) bool {
 	notRequiredSuffices := [3]string{".DS_Store", "__MACOSX", ".gitignore"}
 
