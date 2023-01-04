@@ -170,67 +170,54 @@ func zipSource(source string, target string, testsPath string) error {
 }
 
 func isRequired(path string, testsPath string) bool {
-	// check for the `node_modules` and `bower_components` folders
 	if IsNodeModules(path) || IsBowerComponents(path) {
 		return false
 	}
 
-	// check if it is a `test` path (i.e., a file that e.g. contains unit tests)
 	if IsInTestFolder(path, testsPath) {
 		return false
 	}
 
-	// check for common test files (like .spec.js)
 	if IsTestFile(path) {
 		return false
 	}
 
-	// check for style sheets (like .css and .scss)
 	if IsStyleSheet(path) {
 		return false
 	}
 
-	// check for images (like .jpg, .png, .jpeg)
 	if IsImage(path) {
 		return false
 	}
 
-	// check for documents (like .pdf, .md)
 	if IsDocument(path) {
 		return false
 	}
 
-	// check for fonts (like .woff)
 	if IsFont(path) {
 		return false
 	}
 
-	// check for the `.git` folder
 	if IsGitFolder(path) {
 		return false
 	}
 
-	// check for the dbs (like .db, .sqlite3)
 	if IsDb(path) {
 		return false
 	}
 
-	// check for the `build`, `dist` and `public` folders
 	if IsBuildFolder(path) || IsDistFolder(path) || IsPublicFolder(path) {
 		return false
 	}
 
-	// check for IDE folder (like .code, .idea)
 	if IsIdeFolder(path) {
 		return false
 	}
 
-	// check for video files
 	if IsVideo(path) {
 		return false
 	}
 
-	// check for the "misc" not required stuff
 	if IsMiscNotRequiredFile(path) {
 		return false
 	}

@@ -1,5 +1,3 @@
 - Add it to the NPM registry
 - Add functionality to explicitly include certain files that my packager excludes (sample use case: `node_modules` may contain 2nd party code)
 - Remove all .json that are not bower.json, package.json, package-lock.json
-
-- Add all new features to the feature documentation in the README.md
