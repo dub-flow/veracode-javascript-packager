@@ -1,1 +1,6 @@
 sample-projects/* linguist-vendored
+
+*.js linguist-vendored
+*.ts linguist-vendored
+*.html linguist-vendored
+*.vue linguist-vendored
