@@ -243,7 +243,12 @@ func IsDb(path string) bool {
 
 // check for the `build` folder
 func IsBuildFolder(path string) bool {
-	if strings.Contains(path, string(os.PathSeparator)+"build") {
+	// checks for the "build" folder itself, i.e. for a path that ends with `/build`
+	// ... or for files within the "build" folder, i.e. for a path that contains `/build/`
+	buildFolderPath := string(os.PathSeparator) + "build"
+	fileInBuildFolderPath := buildFolderPath + string(os.PathSeparator)
+
+	if strings.HasSuffix(path, buildFolderPath) || strings.Contains(path, fileInBuildFolderPath) {
 		if !didPrintBuildMsg {
 			log.Info("\tIgnoring `build` folder")
 			didPrintBuildMsg = true
@@ -288,6 +293,8 @@ func IsIdeFolder(path string) bool {
 	idePaths := [2]string{".vscode", ".idea"}
 
 	for _, element := range idePaths {
+		// NOTE: This check should be fine using "Contains" because I don't expect these IDE folder names to be used for
+		// 	anything useful (i.e., I don't anticipate a folder name with ".idea" in its name to contain anything useful)
 		if strings.Contains(path, string(os.PathSeparator)+element) {
 			if !didPrintIdesMsg {
 				log.Info("\tIgnoring IDE folder (such as .code, .idea)")
