@@ -170,58 +170,22 @@ func zipSource(source string, target string, testsPath string) error {
 }
 
 func isRequired(path string, testsPath string) bool {
-	if IsNodeModules(path) || IsBowerComponents(path) {
-		return false
-	}
-
-	if IsInTestFolder(path, testsPath) {
-		return false
-	}
-
-	if IsTestFile(path) {
-		return false
-	}
-
-	if IsStyleSheet(path) {
-		return false
-	}
-
-	if IsImage(path) {
-		return false
-	}
-
-	if IsDocument(path) {
-		return false
-	}
-
-	if IsFont(path) {
-		return false
-	}
-
-	if IsGitFolder(path) {
-		return false
-	}
-
-	if IsDb(path) {
-		return false
-	}
-
-	if IsBuildFolder(path) || IsDistFolder(path) || IsPublicFolder(path) {
-		return false
-	}
-
-	if IsIdeFolder(path) {
-		return false
-	}
-
-	if IsVideo(path) {
-		return false
-	}
-
-	if IsMiscNotRequiredFile(path) {
-		return false
-	}
+	return !IsNodeModules(path) &&
+		!IsBowerComponents(path) &&
+		!IsGitFolder(path) &&
+		!IsInTestFolder(path, testsPath) &&
+		!IsTestFile(path) &&
+		!IsStyleSheet(path) &&
+		!IsImage(path) &&
+		!IsVideo(path) &&
+		!IsDocument(path) &&
+		!IsFont(path) &&
+		!IsDb(path) &&
+		!IsBuildFolder(path) &&
+		!IsDistFolder(path) &&
+		!IsPublicFolder(path) &&
+		!IsIdeFolder(path) &&
+		!IsMiscNotRequiredFile(path)
 
 	// the default is to not omit the file
-	return true
 }
