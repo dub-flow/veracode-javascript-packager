@@ -29,6 +29,7 @@ var didPrintDistMsg bool = false
 var didPrintDbsMsg bool = false
 var didPrintGitFolderMsg bool = false
 var didPrintBowerComponentsMsg bool = false
+var didPrintVideoMsg bool = false
 
 func main() {
 	// parse all the command line flags
@@ -202,7 +203,7 @@ func isRequired(path string, testsPath string) bool {
 		return false
 	}
 
-	// check for style sheets (.css and .scss)
+	// check for style sheets (like .css and .scss)
 	if isStyleSheet(path) {
 		return false
 	}
@@ -239,6 +240,11 @@ func isRequired(path string, testsPath string) bool {
 
 	// check for IDE folder (like .code, .idea)
 	if isIdeFolder(path) {
+		return false
+	}
+
+	// check for video files
+	if isVideo(path) {
 		return false
 	}
 
@@ -362,13 +368,44 @@ func isImage(path string) bool {
 }
 
 func isDocument(path string) bool {
-	documentExtensions := [2]string{".pdf", ".md"}
+	// inspired by https://en.wikipedia.org/wiki/List_of_Microsoft_Office_filename_extensions (and additionally `.md`)
+	documentExtensions := [38]string{
+		".pdf",
+		".md",
+		".doc", ".dot", ".wbk", ".docx", ".docm", ".dotx", ".dotm", ".docb", ".wll", ".wwl",
+		".xls", ".xlt", ".xlm", ".xll_", ".xla_", ".xla5", ".xla8",
+		".xlsx", ".xlsm", ".xltx", ".xltm",
+		".ppt", ".pot", ".pps", ".pptx", ".pptm", ".potx", ".potm",
+		".one", ".ecf",
+		".ACCDA", ".ACCDB", ".ACCDE", ".ACCDT", ".MDA", ".MDE",
+	}
 
 	for _, element := range documentExtensions {
 		if strings.HasSuffix(path, element) {
 			if !didPrintDocumentsMsg {
-				log.Info("\tIgnoring documents (such as `.pdf`)")
+				log.Info("\tIgnoring documents (such as `.pdf`, `.docx`)")
 				didPrintDocumentsMsg = true
+			}
+
+			return true
+		}
+	}
+
+	return false
+}
+
+func isVideo(path string) bool {
+	// inspired by this list: https://en.wikipedia.org/wiki/Video_file_format
+	videoExtensions := [18]string{
+		".mp4", ".webm", ".mkv", ".flv", ".vob", ".ogv", ".drc", ".gifv", ".mng", ".avi", ".mov", ".qt", ".mts", ".wmv", ".amv",
+		".svi", ".m4v", ".mpg",
+	}
+
+	for _, element := range videoExtensions {
+		if strings.HasSuffix(path, element) {
+			if !didPrintVideoMsg {
+				log.Info("\tIgnoring videos (such as `.mp4`)")
+				didPrintVideoMsg = true
 			}
 
 			return true
