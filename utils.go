@@ -62,7 +62,13 @@ func IsInTestFolder(path string, testsPath string) bool {
 		return IsCommonTestFolder(path)
 	}
 
-	if strings.Contains(path, string(os.PathSeparator)+testsPath) {
+	// At this point, `testsPath` may have a value like this: "sample-node-project/test".
+	// Thus, we want to do 2 things:
+	//	  - Exclude this folder itself, i.e. check for a path that ends with "sample-node-project/test"
+	// 	  - Exclude any file in it, i.e. check for path that contains "sample-node-project/test/"
+	fileInTestFolderPath := testsPath + string(os.PathSeparator)
+
+	if strings.HasSuffix(path, testsPath) || strings.Contains(path, fileInTestFolderPath) {
 		if !didPrintTestsMsg {
 			log.Info("\tIgnoring the entire content of the `" + testsPath + "` folder (contains test files)")
 			didPrintTestsMsg = true
