@@ -1,4 +1,4 @@
-# Veracode JavaScript Packager - Beta Version
+# Veracode JavaScript Packager - Beta Version ⚡
 
 Please note that this is **not an official Veracode project**, not supported by Veracode in any form, and comes with no warranty whatsoever. It is simply a little pet project of mine trying to make the life of Veracode's `JavaScript` customers a bit easier. Use at your own risk.
 
@@ -6,15 +6,15 @@ The `Veracode JavaScript Packager` is a tool that packages your `JavaScript` app
 
 There also is a set of sample applications (in `./sample-projects`) that can be used to test to take this tool for a spin.
 
-Please feel free to extend the existing functionality, followed by a `Merge Request`.
+Please feel free to extend the existing functionality, followed by a `Merge Request` ❤️.
 
-## Built-in Help
+# Built-in Help 🆘
 
 Help is built-in!
 
 - `veracode-js-packager --help` - outputs the help.
 
-# How to Use
+# How to Use ⚙
 
 ```text
 Usage:
@@ -27,7 +27,7 @@ Flags:
   
 ```
 
-# What does it do?
+# What does it do? 🔎 
 
 - Creates a zip of the `-source` folder and puts it into the provided `-target` directory as `vc-output.zip`
 - `Features`: 
@@ -45,11 +45,11 @@ Flags:
     - Omit fonts
     - ...
 
-# Setup
+# Setup ✅
 
 - You can simply run this tool from source via `go run .` 
 - You can build the tool yourself via `go build`
 
-# Releases
+# Releases 🔑 
 
 - The `Releases` section contains some binary releases already so that you might not have to build it yourself
