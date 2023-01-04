@@ -83,8 +83,14 @@ func IsInTestFolder(path string, testsPath string) bool {
 func IsCommonTestFolder(path string) bool {
 	testPaths := [3]string{"test", "e2e", "__tests__"}
 
-	for _, element := range testPaths {
-		if strings.Contains(path, string(os.PathSeparator)+element) {
+	for _, testPath := range testPaths {
+		// Here, we want to do 2 things:
+		//	  - Exclude the `testPath` itself, i.e. check for a path that ends e.g. with "/e2e"
+		// 	  - Exclude any file in it, i.e. check for path that contains e.g. "/e2e/"
+		testFolderPath := string(os.PathSeparator) + testPath
+		fileInTestFolderPath := testFolderPath + string(os.PathSeparator)
+
+		if strings.HasSuffix(path, testFolderPath) || strings.Contains(path, fileInTestFolderPath) {
 			if !didPrintDefaultTestFoldersMsg {
 				log.Info("\tIgnoring common test folders (such as `e2e`)")
 				didPrintDefaultTestFoldersMsg = true
