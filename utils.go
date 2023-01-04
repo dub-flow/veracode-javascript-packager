@@ -81,7 +81,7 @@ func IsInTestFolder(path string, testsPath string) bool {
 }
 
 func IsCommonTestFolder(path string) bool {
-	testPaths := [3]string{"test", "e2e", "__tests__"}
+	testPaths := [4]string{"test", "tests", "e2e", "__tests__"}
 
 	for _, testPath := range testPaths {
 		// Here, we want to do 2 things:
