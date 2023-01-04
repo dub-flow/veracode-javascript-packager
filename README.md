@@ -51,7 +51,7 @@ Flags:
 
 # Setup
 
-- You can simply run this tool from source via `go run main.go` 
+- You can simply run this tool from source via `go run .` 
 - You can build the tool yourself via `go build`
 
 # Releases
