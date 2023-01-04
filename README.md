@@ -38,16 +38,12 @@ Flags:
     - Omit the `node_modules`/`bower_components` folders (usually only contains 3rd party libraries)
     - Omit the `tests` directory (that contains e.g. your unit- and integration tests)
         - Specified via `-tests <path>`
-    - Omit style sheets (`.css` and `.scss` files)
-    - Omit images (e.g. `.jpg`, `.png`) 
-    - Omit documents (e.g. `.pdf`)
+    - Omit style sheets (e.g. `.css` and `.scss` files)
+    - Omit images (e.g. `.jpg`, `.png`) and videos (e.g. `.mp4`)
+    - Omit documents (e.g. `.pdf`, `.docx`)
     - Omit the `.git` folder
-    - Omit other non-required files (e.g. `.DS_Store`)
-- `Additional Checks`:
-    - Check if `package-lock.json` exists (this is required for Veracode SCA)
-    - Check if `/public` exists (may contain resources that are not part of your actual 1st party source code)
-    - Check if `/dist` exists (may contain minified JavaScript)
-    - Check for `.map` files (indicates that your JS files might be minified)
+    - Omit fonts
+    - ...
 
 # Setup
 
