@@ -262,7 +262,12 @@ func IsBuildFolder(path string) bool {
 
 // check for the `dist` folder
 func IsDistFolder(path string) bool {
-	if strings.Contains(path, string(os.PathSeparator)+"dist") {
+	// checks for the "dist" folder itself, i.e. for a path that ends with `/dist`
+	// ... or for files within the "dist" folder, i.e. for a path that contains `/dist/`
+	distFolderPath := string(os.PathSeparator) + "dist"
+	fileInDistFolderPath := distFolderPath + string(os.PathSeparator)
+
+	if strings.HasSuffix(path, distFolderPath) || strings.Contains(path, fileInDistFolderPath) {
 		if !didPrintDistMsg {
 			log.Info("\tIgnoring `dist` folder")
 			didPrintDistMsg = true
@@ -276,7 +281,12 @@ func IsDistFolder(path string) bool {
 
 // check for the `public` folder
 func IsPublicFolder(path string) bool {
-	if strings.Contains(path, string(os.PathSeparator)+"public") {
+	// checks for the "dist" folder itself, i.e. for a path that ends with `/dist`
+	// ... or for files within the "dist" folder, i.e. for a path that contains `/dist/`
+	publicFolderPath := string(os.PathSeparator) + "public"
+	fileInPublicFolderPath := publicFolderPath + string(os.PathSeparator)
+
+	if strings.HasSuffix(path, publicFolderPath) || strings.Contains(path, fileInPublicFolderPath) {
 		if !didPrintPublicMsg {
 			log.Info("\tIgnoring `build` folder")
 			didPrintPublicMsg = true
