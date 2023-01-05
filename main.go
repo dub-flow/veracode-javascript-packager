@@ -41,7 +41,7 @@ func main() {
 		log.Info("\tNo `-test` directory was provided... Heuristics will be used to identify (and omit) common test directory names" + "\n\n")
 		testsPath = ""
 	} else {
-		// combine that last segment of the `sourcePtr`` with the value provided via `-test`.
+		// combine that last segment of the `sourcePtr` with the value provided via `-test`.
 		// Example: If `-test mytests` and `-source /some/node-project`, then `testsPath` will be: "node-project/mytests"
 		testsPath = filepath.Join(path.Base(*sourcePtr), *testsPtr)
 		log.Info("\tProvided `-test` directory (its content will be omitted): ", testsPath, "\n\n")
@@ -130,6 +130,15 @@ func zipSource(source string, target string, testsPath string) error {
 			return err
 		}
 
+		// avoids processing the created zip...
+		// 	- Say the tool is finished and an `/vc-output_2023-Jan-05.zip` is created...
+		//  - In this case, the analysis may restart with this zip as `path` 
+		// 		- This edge case was observed when running the tool within a sample JS app..
+		//		- ... i.e., `veracode-js-packager -source . -target .` 
+		if strings.HasSuffix(path, target) {
+			return nil
+		}
+
 		// 3. Create a local file header
 		header, err := zip.FileInfoHeader(info)
 		if err != nil {
@@ -140,7 +149,17 @@ func zipSource(source string, target string, testsPath string) error {
 		header.Method = zip.Deflate
 
 		// 4. Set relative path of a file as the header name
-		header.Name, err = filepath.Rel(filepath.Dir(source), path)
+		// 	-> We want the following:
+		//		- Say `-source some/path/my-js-project` is provided...
+		//			- Now, say we have a path `some/path/ms-js-project/build/some.js`....
+		//		- In this scenario, we want `header.Name` to be `/build/some.js`
+		header.Name, err = filepath.Rel(source, path)
+		// prepends the `/` we want before e.g. `build/some.js`
+		header.Name = string(os.PathSeparator) + header.Name
+
+		log.Debug("Header.Name: ", header.Name)
+		log.Debug("source: ", source)
+		log.Debug("filepath.Dir(source): ", filepath.Dir(source))
 		if err != nil {
 			return err
 		}
