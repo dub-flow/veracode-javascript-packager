@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"strings"
 
@@ -264,6 +265,8 @@ func IsBuildFolder(path string) bool {
 	// ... or for files within the "build" folder, i.e. for a path that contains `/build/`
 	buildFolderPath := string(os.PathSeparator) + "build"
 	fileInBuildFolderPath := buildFolderPath + string(os.PathSeparator)
+	log.Debug(fmt.Sprintf("\tCheck for '%s' and '%s' paths (would be omitted)", buildFolderPath, fileInBuildFolderPath))
+	log.Debug("Path: ", path)
 
 	if strings.HasSuffix(path, buildFolderPath) || strings.Contains(path, fileInBuildFolderPath) {
 		if !didPrintBuildMsg {
