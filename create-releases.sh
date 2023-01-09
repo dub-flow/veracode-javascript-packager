@@ -1,4 +1,4 @@
-rm -r releases
+rm -rf releases
 mkdir -p releases
 
 # build for Windows
