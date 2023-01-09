@@ -78,19 +78,14 @@ func checkForPotentialSmells(source string) {
 		}
 
 		// only do checks for first party code
-		if !strings.Contains(path, "node_modules") && !strings.Contains(path, "bower_components") {
-			// check for the `package-lock.json`, `yarn.lock` or `bower.json` (required for SCA)
+		if !strings.Contains(path, "node_modules") {
+			// check if one of the files required for SCA exists... Note that `bower.json` may be part of `bower_components`
 			if !doesSCAFileExist {
-				packageManagerFiles := [3]string{"package-lock.json", "yarn.lock", "bower.json"}
-				for _, element := range packageManagerFiles {
-					if strings.HasSuffix(path, element) {
-						doesSCAFileExist = true
-					}
-				}
+				doesSCAFileExist = checkIfSCAFileExists(path)
 			}
 
-			// check for `.map` files
-			if strings.HasSuffix(path, ".map") {
+			// check for `.map` files (only in non-3rd party code)
+			if !strings.Contains(path, "bower_components") && strings.HasSuffix(path, ".map") {
 				doesMapFileExist = true
 			}
 		}
@@ -113,6 +108,25 @@ func checkForPotentialSmells(source string) {
 	}
 }
 
+// check for the `package-lock.json`, `yarn.lock` or `bower.json` (required for SCA)
+func checkIfSCAFileExists(path string) bool {
+	// we don't want to look for `package-lock.json` and `yarn.lock` within `bower_components`
+	if !strings.Contains(path, "bower_components") {
+		packageManagerFiles := [2]string{"package-lock.json", "yarn.lock"}
+
+		for _, element := range packageManagerFiles {
+			if strings.HasSuffix(path, element) {
+				return true
+			}
+		}
+	}
+
+	// NOTE: It looks like the `bower.json` file would be in `bower_components`? (tbh, I am not 100% sure how Bower
+	// works exactly, but it's been depreacted like forever and I can't really be bothered looking into how exactly it works)
+	bowerFile := "bower.json"
+	return strings.HasSuffix(path, bowerFile)
+}
+
 func zipSource(source string, target string, testsPath string) error {
 	// 1. Create a ZIP file and zip.Writer
 	f, err := os.Create(target)
@@ -132,9 +146,9 @@ func zipSource(source string, target string, testsPath string) error {
 
 		// avoids processing the created zip...
 		// 	- Say the tool is finished and an `/vc-output_2023-Jan-05.zip` is created...
-		//  - In this case, the analysis may restart with this zip as `path` 
+		//  - In this case, the analysis may restart with this zip as `path`
 		// 		- This edge case was observed when running the tool within a sample JS app..
-		//		- ... i.e., `veracode-js-packager -source . -target .` 
+		//		- ... i.e., `veracode-js-packager -source . -target .`
 		if strings.HasSuffix(path, target) {
 			return nil
 		}
