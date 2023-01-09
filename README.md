@@ -53,6 +53,10 @@ Example:
 - You can simply run this tool from source via `go run .` 
 - You can build the tool yourself via `go build`
 
+# Run Tests 🧪
+
+- To run the tests, run `go test` or `go test -v` (for more details)
+
 # Releases 🔑 
 
 - The `Releases` section contains some already compiled binaries for you so that you might not have to build the tool yourself
@@ -61,6 +65,3 @@ Example:
     - Alternatively, you may - at your own risk - bypass this warning following the guidance here: https://support.apple.com/guide/mac-help/apple-cant-check-app-for-malicious-software-mchleab3a043/mac
     - Afterwards, you can simply run the binary from the command line and provide the required flags
 
-# Run Tests 🧪
-
-- To run the tests, run `go test` or `go test -v` (for more details)
