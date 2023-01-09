@@ -362,10 +362,10 @@ func IsIdeFolder(path string) bool {
 
 // check for the "misc" not required stuff
 func IsMiscNotRequiredFile(path string) bool {
-	notRequiredSuffices := [15]string{
+	notRequiredSuffices := [19]string{
 		".DS_Store", "__MACOSX", ".gitignore", ".gitkeep", ".gitattributes", ".npmignore", "CNAME", "tsconfig.json",
 		"tslint.json", "karma.conf.js", "angular.json", ".travis.yml", ".browserslistrc", ".editorconfig",
-		".d.ts",
+		".d.ts", "protractor.conf.js", ".spec.json", "tsconfig.app.json", "polyfills.ts",
 	}
 
 	for _, element := range notRequiredSuffices {
