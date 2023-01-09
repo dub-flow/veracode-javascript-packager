@@ -36,6 +36,32 @@ func TestZipSourceWithNodeSample(t *testing.T) {
 	}
 }
 
+// Integration test for `zipSource()` with `../sample-projects/sample-node-project/` (note the trailing slash!). The reason
+// for this test is that a trailing slash in the `-source` had lead to a bug that gave me quite some headache to figure out.
+func TestZipSourceWithNodeSampleAndTrailingSlash(t *testing.T) {
+	sourcePath := "./sample-projects/sample-node-project/"
+	targetPath := "./test-output/test-output.zip"
+
+	// generate the zip file and return a list of all its file names
+	zipFileContents := generateZipAndReturnItsFiles(sourcePath, targetPath, "")
+
+	// check if the output conforms with what we expected. To do this, we sort both the expected output and the actual output
+	// and then compare them.
+	expectedFilesInOutputZip := []string{
+		"/app.js", "/package.json", "/package-lock.json", "/testimonials-no-tests/should-be-included.js",
+		"/distance/should-be-included.js", "/building/something.js", "/bower_components/bower.json",
+		"/bower_components/some-thing.js", "/styles/blub.css2",
+	}
+	sort.Strings(expectedFilesInOutputZip)
+	sort.Strings(zipFileContents)
+
+	if !reflect.DeepEqual(zipFileContents, expectedFilesInOutputZip) {
+		t.Error("Test failed!")
+		t.Errorf("Got: %v", zipFileContents)
+		t.Errorf("Expected: %v", expectedFilesInOutputZip)
+	}
+}
+
 // Integration test for `zipSource()` with `../sample-projects/sample-node-project` and `-tests` provided
 func TestZipSourceWithNodeSampleWithTestsFlag(t *testing.T) {
 	sourcePath := "./sample-projects/sample-node-project"
