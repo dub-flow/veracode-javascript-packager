@@ -2,10 +2,6 @@ package main
 
 import (
 	"archive/zip"
-	"bytes"
-	"fmt"
-	"io/ioutil"
-	"os"
 	"reflect"
 	"regexp"
 	"sort"
@@ -73,10 +69,7 @@ func generateZipAndReturnItsFiles(sourcePath string, targetPath string, testsPat
 	}
 
 	// read the output zip file (e.g. `./test-output/test-output.zip`) into memory
-	zipReader, err := readZipFileIntoMemory(targetPath)
-	if err != nil {
-		log.Error(err)
-	}
+	zipReader := readZip(targetPath)
 
 	// iterate over all the files from the zip archive and get all a list of all files (similar to the output of the `tree` command)
 	var zipFileContents []string
@@ -98,23 +91,14 @@ func generateZipAndReturnItsFiles(sourcePath string, targetPath string, testsPat
 }
 
 // reads the zip file for the provided `zipPath` into memory and returns it
-func readZipFileIntoMemory(zipPath string) (*zip.Reader, error) {
-	outputZipFile, err := os.ReadFile(zipPath)
+func readZip(zipPath string) *zip.ReadCloser {
+	r, err := zip.OpenReader(zipPath)
 	if err != nil {
-		return nil, fmt.Errorf("Unable to read file: %v", err)
+		log.Fatal(err)
 	}
+	defer r.Close()
 
-	body, err := ioutil.ReadAll(bytes.NewReader(outputZipFile))
-	if err != nil {
-		return nil, err
-	}
-
-	zipReader, err := zip.NewReader(bytes.NewReader(body), int64(len(body)))
-	if err != nil {
-		return nil, err
-	}
-
-	return zipReader, nil
+	return r
 }
 
 // check if a provided path (e.g. `/some/thing/app.js` or `/some/thing/`) belongs to a file
