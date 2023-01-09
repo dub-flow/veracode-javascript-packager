@@ -63,7 +63,7 @@ func IsNodeModules(path string) bool {
 func IsBowerComponents(path string) bool {
 	// NOTE: Turns out, we don't want to omit the `bower_components` folder since it's required for Bower.
 	// Thus, we don't do anything here for now (this may change in the future)
-	
+
 	// if strings.Contains(path, string(os.PathSeparator)+"bower_components") {
 	// 	if !didPrintBowerComponentsMsg {
 	// 		log.Info("\tIgnoring the entire `bower_components` folder")
@@ -362,7 +362,11 @@ func IsIdeFolder(path string) bool {
 
 // check for the "misc" not required stuff
 func IsMiscNotRequiredFile(path string) bool {
-	notRequiredSuffices := [5]string{".DS_Store", "__MACOSX", ".gitignore", ".gitkeep", ".gitattributes"}
+	notRequiredSuffices := [15]string{
+		".DS_Store", "__MACOSX", ".gitignore", ".gitkeep", ".gitattributes", ".npmignore", "CNAME", "tsconfig.json",
+		"tslint.json", "karma.conf.js", "angular.json", ".travis.yml", ".browserslistrc", ".editorconfig",
+		".d.ts",
+	}
 
 	for _, element := range notRequiredSuffices {
 		if strings.HasSuffix(path, element) {
