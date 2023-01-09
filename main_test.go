@@ -40,13 +40,39 @@ func TestZipSourceWithNodeSample(t *testing.T) {
 	}
 }
 
+// Integration test for `zipSource()` with one of our sample apps `../sample-projects/sample-node-project` and `-tests` provided
+func TestZipSourceWithNodeSampleWithTestsFlag(t *testing.T) {
+	sourcePath := "./sample-projects/sample-node-project"
+	targetPath := "./test-output/test-output.zip"
+	testsPath := "test"
+
+	// generate the zip file and return a list of all its file names
+	zipFileContents := generateZipAndReturnItsFiles(sourcePath, targetPath, testsPath)
+
+	// check if the output conforms with what we expected. To do this, we sort both the expected output and the actual output
+	// and then compare them.
+	expectedFilesInOutputZip := []string{
+		"/app.js", "/package.json", "/package-lock.json", "/testimonials-no-tests/should-be-included.js",
+		"/distance/should-be-included.js", "/building/something.js", "/bower_components/bower.json",
+		"/bower_components/some-thing.js", "/styles/blub.css2", "/e2e/some-more-test.js",
+	}
+	sort.Strings(expectedFilesInOutputZip)
+	sort.Strings(zipFileContents)
+
+	if !reflect.DeepEqual(zipFileContents, expectedFilesInOutputZip) {
+		t.Error("Test failed!")
+		t.Errorf("Got: %v", zipFileContents)
+		t.Errorf("Expected: %v", expectedFilesInOutputZip)
+	}
+}
+
 func generateZipAndReturnItsFiles(sourcePath string, targetPath string, testsPath string) []string {
 	// generate the zip file, and omit all non-required files
 	if err := zipSource(sourcePath, targetPath, testsPath); err != nil {
 		log.Fatal(err)
 	}
 
-	// read the output zip file (`./test-output/test-output.zip`) into memory
+	// read the output zip file (e.g. `./test-output/test-output.zip`) into memory
 	zipReader, err := readZipFileIntoMemory(targetPath)
 	if err != nil {
 		log.Error(err)
