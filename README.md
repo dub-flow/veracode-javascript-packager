@@ -61,6 +61,6 @@ Example:
     - Alternatively, you may - at your own risk - bypass this warning following the guidance here: https://support.apple.com/guide/mac-help/apple-cant-check-app-for-malicious-software-mchleab3a043/mac
     - Afterwards, you can simply run the binary from the command line and provide the required flags
 
-# Run Tests
+# Run Tests 🧪
 
 - To run the tests, run `go test` or `go test -v` (for more details)
