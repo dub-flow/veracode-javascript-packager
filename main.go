@@ -98,8 +98,8 @@ func checkForPotentialSmells(source string) {
 	}
 
 	if !doesSCAFileExist {
-		log.Warn("\tNo `package-lock.json` or `yarn.lock` or `bower.json` file found.. (This file is required for Veracode SCA)")
-		log.Warn("\tYou may not receive Veracode SCA results")
+		log.Warn("\tNo `package-lock.json` or `yarn.lock` or `bower.json` file found.. (This file is required for Veracode SCA)..." +
+			" You may not receive Veracode SCA results!")
 	}
 
 	if doesMapFileExist {
