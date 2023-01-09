@@ -38,7 +38,7 @@ Example:
     - It prevents common, non-required, files from being a part of the zip (such as `node_modules`, `tests`)
     - The tool also checks for "smells" that indicate something might not be right with the packaging, and prints corresponding warnings/errors if a "smell" was found
 - `Omitted Files/Folders`:
-    - Omit the `node_modules`/`bower_components` folders (usually only contains 3rd party libraries)
+    - Omit the `node_modules` folder (usually only contains 3rd party libraries)
     - Omit the `tests` directory (that contains e.g. your unit- and integration tests)
         - Specified via `-tests <path>`
     - Omit style sheets (e.g. `.css` and `.scss` files)
