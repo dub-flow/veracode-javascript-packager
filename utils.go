@@ -61,14 +61,17 @@ func IsNodeModules(path string) bool {
 
 // check for the `bower_components` folder
 func IsBowerComponents(path string) bool {
-	if strings.Contains(path, string(os.PathSeparator)+"bower_components") {
-		if !didPrintBowerComponentsMsg {
-			log.Info("\tIgnoring the entire `bower_components` folder")
-			didPrintBowerComponentsMsg = true
-		}
+	// NOTE: Turns out, we don't want to omit the `bower_components` folder since it's required for Bower.
+	// Thus, we don't do anything here for now (this may change in the future)
+	
+	// if strings.Contains(path, string(os.PathSeparator)+"bower_components") {
+	// 	if !didPrintBowerComponentsMsg {
+	// 		log.Info("\tIgnoring the entire `bower_components` folder")
+	// 		didPrintBowerComponentsMsg = true
+	// 	}
 
-		return true
-	}
+	// 	return true
+	// }
 
 	return false
 }
