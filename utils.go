@@ -365,7 +365,7 @@ func IsMiscNotRequiredFile(path string) bool {
 	notRequiredSuffices := []string{
 		".DS_Store", "__MACOSX", ".gitignore", ".gitkeep", ".gitattributes", ".npmignore", "CNAME", "tsconfig.json",
 		"tslint.json", "karma.conf.js", "angular.json", ".travis.yml", ".browserslistrc", ".editorconfig",
-		".d.ts", "protractor.conf.js", ".spec.json", "tsconfig.app.json", "polyfills.ts", "LICENSE", "LICENSE.md",
+		".d.ts", "protractor.conf.js", ".spec.json", "tsconfig.app.json", "polyfills.ts", "LICENSE",
 	}
 
 	for _, element := range notRequiredSuffices {
