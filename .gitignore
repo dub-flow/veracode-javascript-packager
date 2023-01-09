@@ -15,12 +15,16 @@ __debug_bin
 # 3rd party libraries
 vendor
 
-releases
-veracode-js-packager
-
 # the Dockerfile is not ready for release yet
 Dockerfile
 docker_notes.txt
 
 # PowerPoint stuff
 ~$demo.pptx
+
+# created releases
+releases
+veracode-js-packager
+
+# test stuff
+test-output

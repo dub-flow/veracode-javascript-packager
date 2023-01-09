@@ -26,6 +26,25 @@ var didPrintGitFolderMsg bool = false
 var didPrintBowerComponentsMsg bool = false
 var didPrintVideoMsg bool = false
 
+// check for the `package-lock.json`, `yarn.lock` or `bower.json` (required for SCA)
+func CheckIfSCAFileExists(path string) bool {
+	// we don't want to look for `package-lock.json` and `yarn.lock` within `bower_components`
+	if !strings.Contains(path, "bower_components") {
+		packageManagerFiles := [2]string{"package-lock.json", "yarn.lock"}
+
+		for _, element := range packageManagerFiles {
+			if strings.HasSuffix(path, element) {
+				return true
+			}
+		}
+	}
+
+	// NOTE: It looks like the `bower.json` file would be in `bower_components`? (tbh, I am not 100% sure how Bower
+	// works exactly, but it's been depreacted like forever and I can't really be bothered looking into how exactly it works)
+	bowerFile := "bower.json"
+	return strings.HasSuffix(path, bowerFile)
+}
+
 // check for the `node_modules` folder
 func IsNodeModules(path string) bool {
 	if strings.Contains(path, string(os.PathSeparator)+"node_modules") {

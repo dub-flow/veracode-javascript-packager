@@ -81,7 +81,7 @@ func checkForPotentialSmells(source string) {
 		if !strings.Contains(path, "node_modules") {
 			// check if one of the files required for SCA exists... Note that `bower.json` may be part of `bower_components`
 			if !doesSCAFileExist {
-				doesSCAFileExist = checkIfSCAFileExists(path)
+				doesSCAFileExist = CheckIfSCAFileExists(path)
 			}
 
 			// check for `.map` files (only in non-3rd party code)
@@ -106,25 +106,6 @@ func checkForPotentialSmells(source string) {
 		log.Warn("\tThe 1st party code contains `.map` files (which indicates minified JavaScript)...")
 		log.Warn("\tPlease pass a directory to this tool that contains the unminified/unbundled/unconcatenated JavaScript (or TypeScript)")
 	}
-}
-
-// check for the `package-lock.json`, `yarn.lock` or `bower.json` (required for SCA)
-func checkIfSCAFileExists(path string) bool {
-	// we don't want to look for `package-lock.json` and `yarn.lock` within `bower_components`
-	if !strings.Contains(path, "bower_components") {
-		packageManagerFiles := [2]string{"package-lock.json", "yarn.lock"}
-
-		for _, element := range packageManagerFiles {
-			if strings.HasSuffix(path, element) {
-				return true
-			}
-		}
-	}
-
-	// NOTE: It looks like the `bower.json` file would be in `bower_components`? (tbh, I am not 100% sure how Bower
-	// works exactly, but it's been depreacted like forever and I can't really be bothered looking into how exactly it works)
-	bowerFile := "bower.json"
-	return strings.HasSuffix(path, bowerFile)
 }
 
 func zipSource(source string, target string, testsPath string) error {
