@@ -21,6 +21,9 @@ func TestBefore(t *testing.T) {
 			}
 		}
 	}
+
+	// change the log level to avoid too much logging when running tests
+	log.SetLevel(log.WarnLevel)
 }
 
 // Integration test for `zipSource()` with `../sample-projects/sample-node-project`
