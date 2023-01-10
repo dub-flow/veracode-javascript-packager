@@ -5,3 +5,5 @@
 
 - `-t` instead of `-target`
     - https://github.com/OJ/gobuster/blob/master/README.md
+
+- Add more logging to test to figure it which test is currently ran

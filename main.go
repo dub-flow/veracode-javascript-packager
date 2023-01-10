@@ -149,18 +149,15 @@ func zipSource(source string, target string, testsPath string) error {
 		//			- Now, say we have a path `some/path/ms-js-project/build/some.js`....
 		//		- In this scenario, we want `header.Name` to be `/build/some.js`
 		header.Name, err = filepath.Rel(source, path)
-		// prepends the `/` we want before e.g. `build/some.js`
-		header.Name = string(os.PathSeparator) + header.Name
-
-		log.Debug("Header.Name: ", header.Name)
-		log.Debug("source: ", source)
-		log.Debug("filepath.Dir(source): ", filepath.Dir(source))
 		if err != nil {
 			return err
 		}
 
+		// prepends the `/` we want before e.g. `build/some.js`
+		headerNameWithSlash := string(os.PathSeparator) + header.Name
+
 		// check if the path is required for the upload (otherwise, it will be omitted)
-		if !isRequired(header.Name, testsPath) {
+		if !isRequired(headerNameWithSlash, testsPath) {
 			return nil
 		}
 
