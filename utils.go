@@ -25,6 +25,7 @@ var didPrintDbsMsg bool = false
 var didPrintGitFolderMsg bool = false
 var didPrintBowerComponentsMsg bool = false
 var didPrintVideoMsg bool = false
+var didPringIsMinified bool = false
 
 // check for the `package-lock.json`, `yarn.lock` or `bower.json` (required for SCA)
 func CheckIfSCAFileExists(path string) bool {
@@ -355,6 +356,20 @@ func IsIdeFolder(path string) bool {
 
 			return true
 		}
+	}
+
+	return false
+}
+
+// check for minified JS
+func IsMinified(path string) bool {
+	if strings.HasSuffix(path, ".js.map") || strings.HasSuffix(path, ".min.js") {
+		if !didPringIsMinified {
+			log.Info("\tDropping minified JS (i.e., `.js.map` and `.min.js` files)")
+			didPringIsMinified = true
+		}
+
+		return true
 	}
 
 	return false

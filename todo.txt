@@ -4,4 +4,4 @@
 - Dry run functionality
 
 - `-t` instead of `-target`
-    - https://github.com/OJ/gobuster/blob/master/README.md
+    - Maybe use this tool for flag aliases: https://pkg.go.dev/rsc.io/getopt

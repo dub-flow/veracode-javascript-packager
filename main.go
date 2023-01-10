@@ -84,9 +84,12 @@ func checkForPotentialSmells(source string) {
 				doesSCAFileExist = CheckIfSCAFileExists(path)
 			}
 
-			// check for `.map` files (only in non-3rd party code)
-			if !strings.Contains(path, "bower_components") && strings.HasSuffix(path, ".map") {
-				doesMapFileExist = true
+			// check for `.map` files (only in non-3rd party and "non-build" code)
+			if !strings.Contains(path, "bower_components") && !strings.Contains(path, "build") &&
+				!strings.Contains(path, "dist") && !strings.Contains(path, "public") {
+				if strings.HasSuffix(path, ".map") {
+					doesMapFileExist = true
+				}
 			}
 		}
 
@@ -103,7 +106,7 @@ func checkForPotentialSmells(source string) {
 	}
 
 	if doesMapFileExist {
-		log.Warn("\tThe 1st party code contains `.map` files (which indicates minified JavaScript)...")
+		log.Warn("\tThe 1st party code contains `.map` files outside of `/build`, `/dist` or `/public` (which indicates minified JavaScript)...")
 		log.Warn("\tPlease pass a directory to this tool that contains the unminified/unbundled/unconcatenated JavaScript (or TypeScript)")
 	}
 }
@@ -208,6 +211,7 @@ func isRequired(path string, testsPath string) bool {
 		!IsDistFolder(path) &&
 		!IsPublicFolder(path) &&
 		!IsIdeFolder(path) &&
+		!IsMinified(path) &&
 		!IsMiscNotRequiredFile(path)
 
 	// the default is to not omit the file
