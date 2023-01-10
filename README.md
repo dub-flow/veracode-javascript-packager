@@ -26,7 +26,8 @@ Flags:
   -tests string      The path that contains your test files (relative to the source). Uses a heuristic to identify tests automatically in case no path is provided (default "")
   -debug bool        Sets the log level to Debug if set to '-debug=true' (default "false")
 
-Example:
+Examples:
+    ./veracode-js-packager -source my-js-app -target . 
     ./veracode-js-packager -source my-js-app -target . -tests tests -debug=false
 ```
 
