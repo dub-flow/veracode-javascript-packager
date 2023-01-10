@@ -36,43 +36,6 @@ func TestZipSourceWithNodeSample(t *testing.T) {
 	}
 }
 
-// // Integration test for `zipSource()` with `../sample-projects/sample-node-project` with `-source . -target .`. The reason for
-// // this test is that having source and target as the same lead to some weird behavior where the created output zip would be
-// // processed by our tool and zipped again.
-// func TestZipSourceWithNodeSampleAndSameSourceAndTarget(t *testing.T) {
-// 	// to simulate this behavior, we copy `./sample-projects/sample-node-project` into `./test-output/`, and then change the
-// 	// current working directory for this test to `./test-output/sample-node-project`. Now that we are within the
-// 	// `sample-node-project` folder we want to package, we run the tool with `-source . -target .`.
-// 	exec.Command("cp -r ./sample-projects/sample-node-project ./test-output/sample-node-project")
-// 	os.Chdir("./test-output/sample-node-project")
-
-// 	sourcePath := "."
-// 	targetPath := "./test-output.zip"
-
-// 	// generate the zip file and return a list of all its file names
-// 	zipFileContents := generateZipAndReturnItsFiles(sourcePath, targetPath, "")
-
-// 	// check if the output conforms with what we expected. To do this, we sort both the expected output and the actual output
-// 	// and then compare them.
-// 	expectedFilesInOutputZip := []string{
-// 		"/app.js", "/package.json", "/package-lock.json", "/testimonials-no-tests/should-be-included.js",
-// 		"/distance/should-be-included.js", "/building/something.js", "/bower_components/bower.json",
-// 		"/bower_components/some-thing.js", "/styles/blub.css2",
-// 	}
-// 	sort.Strings(expectedFilesInOutputZip)
-// 	sort.Strings(zipFileContents)
-
-// 	if !reflect.DeepEqual(zipFileContents, expectedFilesInOutputZip) {
-// 		t.Error("Test failed!")
-// 		t.Errorf("Got: %v", zipFileContents)
-// 		t.Errorf("Expected: %v", expectedFilesInOutputZip)
-// 	}
-
-// 	// last, we wanna delete change our current working directory back, and remove `./sample-projects/sample-node-project`
-// 	os.Chdir("../../")
-// 	exec.Command("rm -r ./test-output/sample-node-project")
-// }
-
 // Integration test for `zipSource()` with `../sample-projects/sample-node-project/` (note the trailing slash!). The reason
 // for this test is that a trailing slash in the `-source` had lead to a bug that gave me quite some headache to figure out.
 func TestZipSourceWithNodeSampleAndTrailingSlash(t *testing.T) {
