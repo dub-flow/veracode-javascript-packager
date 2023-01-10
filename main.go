@@ -130,7 +130,7 @@ func zipSource(source string, target string, testsPath string) error {
 		//  - In this case, the analysis may restart with this zip as `path`
 		// 		- This edge case was observed when running the tool within a sample JS app..
 		//		- ... i.e., `veracode-js-packager -source . -target .`
-		if strings.HasSuffix(path, target) {
+		if strings.HasSuffix(path, ".zip") {
 			return nil
 		}
 
@@ -165,7 +165,8 @@ func zipSource(source string, target string, testsPath string) error {
 		}
 
 		if info.IsDir() {
-			header.Name += "/"
+			// add e.g. a `/` if the current path is a directory
+			header.Name += string(os.PathSeparator)
 		}
 
 		// 5. Create writer for the file header and save content of the file
