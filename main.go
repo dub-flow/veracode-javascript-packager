@@ -153,6 +153,11 @@ func zipSource(source string, target string, testsPath string) error {
 			return err
 		}
 
+		// avoids the `./` folder in the root of the output zip
+		if header.Name == "." {
+			return nil
+		}
+
 		// prepends the `/` we want before e.g. `build/some.js`
 		headerNameWithSlash := string(os.PathSeparator) + header.Name
 
