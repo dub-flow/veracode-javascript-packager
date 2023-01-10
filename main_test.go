@@ -12,6 +12,17 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+func TestBefore(t *testing.T) {
+	// check if the `./test-output` folder exists (otherwise, create it)
+	if _, err := os.Stat("." + string(os.PathSeparator) + "test-output"); err != nil {
+		if os.IsNotExist(err) {
+			if err := os.Mkdir("."+string(os.PathSeparator)+"test-output", os.ModePerm); err != nil {
+				log.Fatal(err)
+			}
+		}
+	}
+}
+
 // Integration test for `zipSource()` with `../sample-projects/sample-node-project`
 func TestZipSourceWithNodeSample(t *testing.T) {
 	sourcePath := "." + string(os.PathSeparator) + "sample-projects" + string(os.PathSeparator) + "sample-node-project"
