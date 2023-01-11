@@ -150,8 +150,8 @@ func zipSource(source string, target string, testsPath string) error {
 		// 4. Set relative path of a file as the header name
 		// 	-> We want the following:
 		//		- Say `-source some/path/my-js-project` is provided...
-		//			- Now, say we have a path `some/path/ms-js-project/build/some.js`....
-		//		- In this scenario, we want `header.Name` to be `/build/some.js`
+		//			- Now, say we have a path `some/path/my-js-project/build/some.js`....
+		//		- In this scenario, we want `header.Name` to be `build/some.js`
 		header.Name, err = filepath.Rel(source, path)
 		if err != nil {
 			return err
