@@ -254,7 +254,7 @@ func IsAngularCacheFolder(path string) bool {
 
 	if strings.HasSuffix(path, gitFolderPath) || strings.Contains(path, fileInGitFolderPath) {
 		if !didPrintGitFolderMsg {
-			log.Info("\tIgnoring `.git`")
+			log.Info("\tIgnoring `.angular`")
 			didPrintGitFolderMsg = true
 		}
 
