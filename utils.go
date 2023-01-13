@@ -245,6 +245,25 @@ func IsFont(path string) bool {
 	return false
 }
 
+// check for the `.angular` folder
+func IsAngularCacheFolder(path string) bool {
+	// checks for the ".angular" folder itself, i.e. for a path that ends with `/.angular`
+	// ... or for files within the ".angular" folder, i.e. for a path that contains `/.angular/`
+	gitFolderPath := string(os.PathSeparator) + ".angular"
+	fileInGitFolderPath := gitFolderPath + string(os.PathSeparator)
+
+	if strings.HasSuffix(path, gitFolderPath) || strings.Contains(path, fileInGitFolderPath) {
+		if !didPrintGitFolderMsg {
+			log.Info("\tIgnoring `.git`")
+			didPrintGitFolderMsg = true
+		}
+
+		return true
+	}
+
+	return false
+}
+
 // check for the `.git` folder
 func IsGitFolder(path string) bool {
 	// checks for the ".git" folder itself, i.e. for a path that ends with `/.git`
