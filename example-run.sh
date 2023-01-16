@@ -1,0 +1,1 @@
+go run . -s ./sample-projects/sample-node-project -t . 

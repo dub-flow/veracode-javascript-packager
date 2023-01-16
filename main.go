@@ -17,17 +17,17 @@ import (
 
 func main() {
 	// parse all the command line flags
-	sourcePtr := flag.String("source", "."+string(os.PathSeparator)+"sample-projects"+string(os.PathSeparator)+"sample-node-project",
-		"The path of the JavaScript app you want to package")
+	sourcePtr := flag.String("source", "", "The path of the JavaScript app you want to package (required)")
 	targetPtr := flag.String("target", ".", "The path where you want the vc-output.zip to be stored to")
 	testsPtr := flag.String("tests", "", "The path that contains your test files (relative to the source). Uses a heuristic to identifiy tests automatically in case no path is provided")
-	isDebugPtr := flag.Bool("debug", false, "Bool argument which sets the log level to Debug if set to 'true'")
+	isDebugPtr := flag.Bool("debug", false, "Bool argument which sets the log level to Debug if set to 'true' (defaults to false)")
 
 	// define aliases
 	getopt.Alias("s", "source")
 	getopt.Alias("t", "target")
 
-	// `getopt` still uses `flags.Parse()` under the hood
+	// parse the flags and the aliases. We still run `flag.Parse` so that e.g. `--help` does only render the built-in help
+	flag.Parse()
 	getopt.Parse()
 
 	log.Info("#################################################")
@@ -35,6 +35,12 @@ func main() {
 	log.Info("#   Veracode JavaScript Packager (Unofficial)   #")
 	log.Info("#                                               #")
 	log.Info("#################################################" + "\n\n")
+
+	// fail if `--source` was not provided
+	if *sourcePtr == "" {
+		log.Error("No `--source` was provided. Run `--help` for the built-in help.")
+		os.Exit(0)
+	}
 
 	// add the current date to the output zip name, like e.g. "2023-Jan-04"
 	currentTime := time.Now()
