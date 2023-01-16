@@ -21,19 +21,19 @@ Usage:
     veracode-js-packager [flags]
 
 Flags:
-  -source string     The path to the JavaScript app you want to package (default "./sample-projects/sample-node-project")
-  -target string     The path where you want the vc-output.zip to be stored to (default ".")
-  -tests string      The path that contains your test files (relative to the source). Uses a heuristic to identify tests automatically in case no path is provided (default "")
-  -debug bool        Sets the log level to Debug if set to '-debug=true' (default "false")
+  -s, --source string   The path to the JavaScript app you want to package (default "./sample-projects/sample-node-project")
+  -t, --target string   The path where you want the vc-output.zip to be stored to (default ".")
+  --tests string        The path that contains your test files (relative to the source). Uses a heuristic to identify tests automatically in case no path is provided (default "")
+  --debug bool          Sets the log level to Debug if set to '-debug=true' (default "false")
 
 Examples:
-    ./veracode-js-packager -source my-js-app -target . 
-    ./veracode-js-packager -source my-js-app -target . -tests tests -debug=false
+    ./veracode-js-packager -s my-js-app -t . 
+    ./veracode-js-packager --source my-js-app --target . --tests tests --debug=false
 ```
 
 # What does it do? 🔎 
 
-- Creates a zip of the `-source` folder and puts it into the provided `-target` directory as `vc-output.zip`
+- Creates a zip of the `--source` folder and puts it into the provided `--target` directory as `vc-output.zip`
 - `Features`: 
     - This tool creates a zip of your application ready to be uploaded to the Veracode Platform
     - It prevents common, non-required, files from being a part of the zip (such as `node_modules`, `tests`)
@@ -41,7 +41,7 @@ Examples:
 - `Omitted Files/Folders`:
     - Omit the `node_modules` folder (usually only contains 3rd party libraries)
     - Omit the `tests` directory (that contains e.g. your unit- and integration tests)
-        - Specified via `-tests <path>`
+        - Specified via `--tests <path>`
     - Omit style sheets (e.g. `.css` and `.scss` files)
     - Omit images (e.g. `.jpg`, `.png`) and videos (e.g. `.mp4`)
     - Omit documents (e.g. `.pdf`, `.docx`)

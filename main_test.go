@@ -57,7 +57,7 @@ func TestZipSourceWithNodeSample(t *testing.T) {
 }
 
 // Integration test for `zipSource()` with `../sample-projects/sample-node-project/` (note the trailing slash!). The reason
-// for this test is that a trailing slash in the `-source` had lead to a bug that gave me quite some headache to figure out.
+// for this test is that a trailing slash in the `--source` had lead to a bug that gave me quite some headache to figure out.
 func TestZipSourceWithNodeSampleAndTrailingSlash(t *testing.T) {
 	log.Info("---------- Running Test: TestZipSourceWithNodeSampleAndTrailingSlash ----------")
 

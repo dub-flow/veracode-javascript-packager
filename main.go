@@ -10,6 +10,8 @@ import (
 	"strings"
 	"time"
 
+	"rsc.io/getopt"
+
 	log "github.com/sirupsen/logrus"
 )
 
@@ -20,7 +22,13 @@ func main() {
 	targetPtr := flag.String("target", ".", "The path where you want the vc-output.zip to be stored to")
 	testsPtr := flag.String("tests", "", "The path that contains your test files (relative to the source). Uses a heuristic to identifiy tests automatically in case no path is provided")
 	isDebugPtr := flag.Bool("debug", false, "Bool argument which sets the log level to Debug if set to 'true'")
-	flag.Parse()
+
+	// define aliases
+	getopt.Alias("s", "source")
+	getopt.Alias("t", "target")
+
+	// `getopt` still uses `flags.Parse()` under the hood
+	getopt.Parse()
 
 	log.Info("#################################################")
 	log.Info("#                                               #")
@@ -35,17 +43,17 @@ func main() {
 	// echo the provided flags
 	var testsPath string
 	log.Info("Provided Flags:")
-	log.Info("\t`-source` directory to zip up: ", *sourcePtr)
-	log.Info("\t`-target` directory for the output: ", *targetPtr)
+	log.Info("\t`--source` directory to zip up: ", *sourcePtr)
+	log.Info("\t`--target` directory for the output: ", *targetPtr)
 
 	if *testsPtr == "" {
-		log.Info("\tNo `-test` directory was provided... Heuristics will be used to identify (and omit) common test directory names" + "\n\n")
+		log.Info("\tNo `--test` directory was provided... Heuristics will be used to identify (and omit) common test directory names")
 		testsPath = ""
 	} else {
 		// combine that last segment of the `sourcePtr` with the value provided via `-test`.
 		// Example: If `-test mytests` and `-source /some/node-project`, then `testsPath` will be: "node-project/mytests"
 		testsPath = filepath.Join(path.Base(*sourcePtr), *testsPtr)
-		log.Info("\tProvided `-test` directory (its content will be omitted): ", testsPath, "\n\n")
+		log.Info("\tProvided `-test` directory (its content will be omitted): ", testsPath)
 	}
 
 	if *isDebugPtr {
@@ -54,6 +62,7 @@ func main() {
 	}
 
 	// check for some "smells" (e.g. the `package-lock.json` file is missing), and print corresponding warnings/errors
+	log.Info("\n\n")
 	log.Info("Checking for 'smells' that indicate packaging issues - Started...")
 	checkForPotentialSmells(*sourcePtr)
 	log.Info("'Smells' Check - Done\n\n")
@@ -133,7 +142,7 @@ func zipSource(source string, target string, testsPath string) error {
 		// 	- Say the tool is finished and an `/vc-output_2023-Jan-05.zip` is created...
 		//  - In this case, the analysis may restart with this zip as `path`
 		// 		- This edge case was observed when running the tool within a sample JS app..
-		//		- ... i.e., `veracode-js-packager -source . -target .`
+		//		- ... i.e., `veracode-js-packager --source . --target .`
 		if strings.HasSuffix(path, ".zip") {
 			return nil
 		}
@@ -149,7 +158,7 @@ func zipSource(source string, target string, testsPath string) error {
 
 		// 4. Set relative path of a file as the header name
 		// 	-> We want the following:
-		//		- Say `-source some/path/my-js-project` is provided...
+		//		- Say `--source some/path/my-js-project` is provided...
 		//			- Now, say we have a path `some/path/my-js-project/build/some.js`....
 		//		- In this scenario, we want `header.Name` to be `build/some.js`
 		header.Name, err = filepath.Rel(source, path)
