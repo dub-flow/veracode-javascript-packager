@@ -198,6 +198,7 @@ func zipSource(source string, target string, testsPath string) error {
 
 func isRequired(path string, testsPath string) bool {
 	return !IsNodeModules(path) &&
+		!IsAngularCacheFolder(path) &&
 		!IsBowerComponents(path) &&
 		!IsGitFolder(path) &&
 		!IsInTestFolder(path, testsPath) &&

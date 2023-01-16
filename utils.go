@@ -22,6 +22,7 @@ var didPrintBuildMsg bool = false
 var didPrintPublicMsg bool = false
 var didPrintDistMsg bool = false
 var didPrintDbsMsg bool = false
+var didPrintAngularFolderMsg bool = false
 var didPrintGitFolderMsg bool = false
 var didPrintBowerComponentsMsg bool = false
 var didPrintVideoMsg bool = false
@@ -240,6 +241,25 @@ func IsFont(path string) bool {
 
 			return true
 		}
+	}
+
+	return false
+}
+
+// check for the `.angular` folder
+func IsAngularCacheFolder(path string) bool {
+	// checks for the ".angular" folder itself, i.e. for a path that ends with `/.angular`
+	// ... or for files within the ".angular" folder, i.e. for a path that contains `/.angular/`
+	angularFolderPath := string(os.PathSeparator) + ".angular"
+	fileInAngularFolderPath := angularFolderPath + string(os.PathSeparator)
+
+	if strings.HasSuffix(path, angularFolderPath) || strings.Contains(path, fileInAngularFolderPath) {
+		if !didPrintAngularFolderMsg {
+			log.Info("\tIgnoring `.angular`")
+			didPrintAngularFolderMsg = true
+		}
+
+		return true
 	}
 
 	return false
