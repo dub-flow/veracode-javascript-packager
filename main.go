@@ -28,7 +28,7 @@ func main() {
 
 	// fail if `--source` was not provided
 	if *sourcePtr == "" {
-		log.Error("No `-source` was provided. Run `-help` for the built-in help.")
+		log.Error("No `-source` was provided. Run `--help` for the built-in help.")
 		return
 	}
 
