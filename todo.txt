@@ -5,3 +5,4 @@
 
 - `-t` instead of `-target`
     - Maybe use this tool for flag aliases: https://pkg.go.dev/rsc.io/getopt
+    - Or maybe https://www.thorsten-hans.com/lets-build-a-cli-in-go-with-cobra/
