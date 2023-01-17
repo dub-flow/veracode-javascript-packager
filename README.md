@@ -24,11 +24,10 @@ Flags:
   -s, --source string   The path to the JavaScript app you want to package
   -t, --target string   The path where you want the vc-output.zip to be stored to (default ".")
   --tests string        The path that contains your test files (relative to the source). Uses a heuristic to identify tests automatically in case no path is provided (default "")
-  --debug bool          Sets the log level to Debug if set to '-debug=true' (default "false")
 
 Examples:
     ./veracode-js-packager -s my-js-app -t . 
-    ./veracode-js-packager --source my-js-app --target . --tests tests --debug=false
+    ./veracode-js-packager --source my-js-app --target . --tests tests
 ```
 
 # What does it do? 🔎 

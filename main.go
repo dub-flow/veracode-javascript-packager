@@ -2,7 +2,6 @@ package main
 
 import (
 	"archive/zip"
-	"flag"
 	"io"
 	"os"
 	"path"
@@ -10,25 +9,27 @@ import (
 	"strings"
 	"time"
 
-	"rsc.io/getopt"
+	"github.com/droundy/goopt"
 
 	log "github.com/sirupsen/logrus"
 )
 
 func main() {
 	// parse all the command line flags
-	sourcePtr := flag.String("source", "", "The path of the JavaScript app you want to package (required)")
-	targetPtr := flag.String("target", ".", "The path where you want the vc-output.zip to be stored to")
-	testsPtr := flag.String("tests", "", "The path that contains your test files (relative to the source). Uses a heuristic to identifiy tests automatically in case no path is provided")
-	isDebugPtr := flag.Bool("debug", false, "Bool argument which sets the log level to Debug if set to 'true' (defaults to false)")
+	sourcePtr := goopt.String([]string{"-s", "--source"}, "", "The path of the JavaScript app you want to package (required)")
+	targetPtr := goopt.String([]string{"-t", "--target"}, ".", "The path where you want the vc-output.zip to be stored to (default: \".\")")
+	testsPtr := goopt.String([]string{"--tests"}, "", "The path that contains your test files (relative to the source). Uses a heuristic to identifiy tests if no path is provided")
 
-	// define aliases
-	getopt.Alias("s", "source")
-	getopt.Alias("t", "target")
+	// the version of this tool
+	goopt.Version = "0.1.2"
+	goopt.OptArg()
+	goopt.Parse(nil)
 
-	// parse the flags and the aliases. We still run `flag.Parse` so that e.g. `--help` does only render the built-in help
-	flag.Parse()
-	getopt.Parse()
+	// print the help if no argument was provided
+	if len(goopt.Args) == 0 {
+		println(goopt.Usage())
+		return
+	}
 
 	log.Info("#################################################")
 	log.Info("#                                               #")
@@ -39,7 +40,7 @@ func main() {
 	// fail if `--source` was not provided
 	if *sourcePtr == "" {
 		log.Error("No `--source` was provided. Run `--help` for the built-in help.")
-		os.Exit(0)
+		return
 	}
 
 	// add the current date to the output zip name, like e.g. "2023-Jan-04"
@@ -60,11 +61,6 @@ func main() {
 		// Example: If `-test mytests` and `-source /some/node-project`, then `testsPath` will be: "node-project/mytests"
 		testsPath = filepath.Join(path.Base(*sourcePtr), *testsPtr)
 		log.Info("\tProvided `-test` directory (its content will be omitted): ", testsPath)
-	}
-
-	if *isDebugPtr {
-		log.SetLevel(log.DebugLevel)
-		log.Info("\t`-debug` is set to true which means debug messages are logged")
 	}
 
 	// check for some "smells" (e.g. the `package-lock.json` file is missing), and print corresponding warnings/errors

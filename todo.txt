@@ -2,6 +2,3 @@
 - Add functionality to explicitly include certain files that my packager excludes (sample use case: `node_modules` may contain 2nd party code)
 - Remove all .json that are not bower.json, package.json, package-lock.json
 - Dry run functionality
-
-- `-t` instead of `-target`
-    - Maybe use this tool for flag aliases: https://pkg.go.dev/rsc.io/getopt
