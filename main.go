@@ -19,7 +19,6 @@ func main() {
 		"The path of the JavaScript app you want to package")
 	targetPtr := flag.String("target", ".", "The path where you want the vc-output.zip to be stored to")
 	testsPtr := flag.String("tests", "", "The path that contains your test files (relative to the source). Uses a heuristic to identifiy tests automatically in case no path is provided")
-	isDebugPtr := flag.Bool("debug", false, "Bool argument which sets the log level to Debug if set to 'true'")
 	flag.Parse()
 
 	log.Info("#################################################")
@@ -46,11 +45,6 @@ func main() {
 		// Example: If `-test mytests` and `-source /some/node-project`, then `testsPath` will be: "node-project/mytests"
 		testsPath = filepath.Join(path.Base(*sourcePtr), *testsPtr)
 		log.Info("\tProvided `-test` directory (its content will be omitted): ", testsPath, "\n\n")
-	}
-
-	if *isDebugPtr {
-		log.SetLevel(log.DebugLevel)
-		log.Info("\t`-debug` is set to true which means debug messages are logged")
 	}
 
 	// check for some "smells" (e.g. the `package-lock.json` file is missing), and print corresponding warnings/errors
