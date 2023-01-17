@@ -15,9 +15,13 @@ import (
 
 func main() {
 	// parse all the command line flags
-	sourcePtr := flag.String("source", "", "The path of the JavaScript app you want to package")
+	sourcePtr := flag.String("source", "", "The path of the JavaScript app you want to package (required)")
 	targetPtr := flag.String("target", ".", "The path where you want the vc-output.zip to be stored to")
-	testsPtr := flag.String("tests", "", "The path that contains your test files (relative to the source). Uses a heuristic to identifiy tests automatically in case no path is provided")
+	testsPtr := flag.String(
+		"tests", 
+		"", 
+		"The path that contains your test files (relative to the source). Uses a heuristic to identifiy tests automatically in case no path is provided"
+	)
 	flag.Parse()
 
 	log.Info("#################################################")
