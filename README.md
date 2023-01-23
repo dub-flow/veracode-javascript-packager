@@ -21,9 +21,9 @@ Usage:
     veracode-js-packager [flags]
 
 Flags:
-  -source string     The path to the JavaScript app you want to package (default "./sample-projects/sample-node-project")
+  -source string     The path to the JavaScript app you want to package (required)
   -target string     The path where you want the vc-output.zip to be stored to (default ".")
-  -tests string      The path that contains your test files (relative to the source). Uses a heuristic to identify tests automatically in case no path is provided (default "")
+  -tests string      The path that contains your test files (relative to the source). (default: Uses a heuristic to identify tests automatically in case no path is provided)
 
 Examples:
     ./veracode-js-packager -source my-js-app -target . 
