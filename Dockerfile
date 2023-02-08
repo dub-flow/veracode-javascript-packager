@@ -1,4 +1,4 @@
-FROM golang:1.19-alpine
+FROM golang:1.19
 
 WORKDIR /app
 
@@ -19,5 +19,5 @@ RUN ./create-releases.sh docker
 # Change the directory into the JS app to package. This means we can provide `-source . -target .` which is less confusing for users
 WORKDIR /app/js-app
 
-# Run the Linux x86 release
-ENTRYPOINT ["/app/releases/veracode-js-packager-linux-amd64", "-source", ".", "-target", "."]
+# Run the tool
+ENTRYPOINT ["/app/veracode-js-packager", "-source", ".", "-target", "."]
