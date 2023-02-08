@@ -31,6 +31,9 @@ func main() {
 
 	color.Yellow("Current version: %s\n\n", AppVersion)
 
+	// check if a later version of this tool exists
+	notifyOfUpdates()
+
 	// fail if `--source` was not provided
 	if *sourcePtr == "" {
 		color.Red("No `-source` was provided. Run `--help` for the built-in help.")
