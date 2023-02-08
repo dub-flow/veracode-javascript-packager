@@ -11,6 +11,8 @@ import (
 	"time"
 
 	log "github.com/sirupsen/logrus"
+
+	"github.com/fatih/color"
 )
 
 func main() {
@@ -18,17 +20,20 @@ func main() {
 	sourcePtr := flag.String("source", "", "The path of the JavaScript app you want to package (required)")
 	targetPtr := flag.String("target", ".", "The path where you want the vc-output.zip to be stored to")
 	testsPtr := flag.String("tests", "", "The path that contains your test files (relative to the source). Uses a heuristic to identifiy tests automatically in case no path is provided")
+
 	flag.Parse()
 
-	log.Info("#################################################")
-	log.Info("#                                               #")
-	log.Info("#   Veracode JavaScript Packager (Unofficial)   #")
-	log.Info("#                                               #")
-	log.Info("#################################################" + "\n\n")
+	color.Green("#################################################")
+	color.Green("#                                               #")
+	color.Green("#   Veracode JavaScript Packager (Unofficial)   #")
+	color.Green("#                                               #")
+	color.Green("#################################################" + "\n\n")
+
+	color.Yellow("Current version: %s\n\n", AppVersion)
 
 	// fail if `--source` was not provided
 	if *sourcePtr == "" {
-		log.Error("No `-source` was provided. Run `--help` for the built-in help.")
+		color.Red("No `-source` was provided. Run `--help` for the built-in help.")
 		return
 	}
 
