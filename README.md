@@ -59,7 +59,7 @@ Examples:
 # Run via Docker 🐳
 
 - Build the docker image via `docker build . -t veracode-js-packager`
-- Run (**from within the `JavaScript app` you want to package**) via `docker run -it --rm -v "$(pwd):/app/js-app" --name packager veracode-js-packager`
+- Run (**from within the directory of the `JavaScript app` you want to package**) via `docker run -it --rm -v "$(pwd):/app/js-app" --name packager veracode-js-packager`
     - This puts the `vc-output.zip` (which you can upload to `Veracode`) into the current working directory
     - `NOTE`:
         - Running the tool via `docker` copies the current directory into the container and passes it to `-source`
