@@ -15,10 +15,6 @@ __debug_bin
 # 3rd party libraries
 vendor
 
-# the Dockerfile is not ready for release yet
-Dockerfile
-docker_notes.txt
-
 # PowerPoint stuff
 ~$demo.pptx
 
