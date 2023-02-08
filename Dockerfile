@@ -16,5 +16,8 @@ COPY create-releases.sh ./
 # Build the app
 RUN ./create-releases.sh docker
 
+# Move into the `/app/js-app` directory where the JavaScript app to packages is
+CMD js-app
+
 # Run the Linux x86 release
-ENTRYPOINT ["./releases/veracode-js-packager-linux-amd64", "-source", "./js-app", "-target", "./js-app"]
+ENTRYPOINT ["/app/releases/veracode-js-packager-linux-amd64", "-source", ".", "-target", "."]
