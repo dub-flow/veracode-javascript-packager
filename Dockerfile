@@ -11,7 +11,7 @@ RUN go mod download
 COPY *.go ./
 
 # Copy the file to compile the app into the container
-Copy create-releases.sh ./
+COPY create-releases.sh ./
 
 # Build the app
 RUN ./create-releases.sh docker
