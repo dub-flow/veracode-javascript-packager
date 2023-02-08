@@ -1,4 +1,4 @@
-FROM golang:1.19
+FROM golang:1.19-alpine
 
 WORKDIR /app
 
@@ -12,6 +12,9 @@ COPY *.go ./
 
 # Copy the file to compile the app into the container
 COPY create-releases.sh ./
+
+# Install dependencies required to compile the app
+RUN apk add build-base
 
 # Build the app
 RUN ./create-releases.sh docker
