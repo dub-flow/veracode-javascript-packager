@@ -3,6 +3,7 @@ package main
 import (
 	"archive/zip"
 	"flag"
+	"fmt"
 	"io"
 	"os"
 	"path"
@@ -20,6 +21,19 @@ func main() {
 	sourcePtr := flag.String("source", "", "The path of the JavaScript app you want to package (required)")
 	targetPtr := flag.String("target", ".", "The path where you want the vc-output.zip to be stored to")
 	testsPtr := flag.String("tests", "", "The path that contains your test files (relative to the source). Uses a heuristic to identifiy tests automatically in case no path is provided")
+
+	// overwrite `flag.Usage` to print a usage example and a program description when `--help` is called
+	flag.Usage = func() {
+		// the binary name of this tool
+		binaryName := filepath.Base(os.Args[0])
+
+		// may be `os.Stderr` but not necessarily
+		w := flag.CommandLine.Output()
+
+		fmt.Fprintf(w, "Usage of %s:\n", binaryName)
+		flag.PrintDefaults()
+		fmt.Fprintf(w, "\nExample: \n\t%s -source ./sample-projects/sample-node-project -target .\n", binaryName)
+	}
 
 	flag.Parse()
 

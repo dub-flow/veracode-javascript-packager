@@ -48,6 +48,6 @@ func notifyOfUpdates() {
 
 	// check if a newer version exists
 	if vCurrent.LessThan(vLatest) {
-		color.HiYellow(fmt.Sprintf("Please upgrade to the latest version of this tool (%s) by visiting %s\n", response["tag_name"], latestRelease))
+		color.HiYellow(fmt.Sprintf("Please upgrade to the latest version of this tool (%s) by visiting %s\n\n", response["tag_name"], latestRelease))
 	}
 }
