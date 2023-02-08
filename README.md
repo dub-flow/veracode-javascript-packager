@@ -1,4 +1,7 @@
-# Veracode JavaScript Packager - Beta Version ⚡
+![Go Version](https://img.shields.io/github/go-mod/go-version/fw10/veracode-javascript-packager)
+![Downloads](https://img.shields.io/github/downloads/fw10/veracode-javascript-packager/total)
+
+# Veracode JavaScript Packager ⚡
 
 Please note that this is **not an official Veracode project**, not supported by Veracode in any form, and comes with no warranty whatsoever. It is simply a little pet project of mine trying to make the life of Veracode's `JavaScript` customers a bit easier. Use at your own risk.
 
@@ -60,7 +63,7 @@ Examples:
 # Releases 🔑 
 
 - The `Releases` section contains some already compiled binaries for you so that you might not have to build the tool yourself
-- For the `Mac M1 release`, your Mac will throw a warning (`"cannot be opened because it is from an unidentified developer"`)
+- For the `Mac releases`, your Mac will throw a warning (`"cannot be opened because it is from an unidentified developer"`)
     - To avoid this warning in the first place, you could simply build the app yourself (see Setup)
     - Alternatively, you may - at your own risk - bypass this warning following the guidance here: https://support.apple.com/guide/mac-help/apple-cant-check-app-for-malicious-software-mchleab3a043/mac
     - Afterwards, you can simply run the binary from the command line and provide the required flags
