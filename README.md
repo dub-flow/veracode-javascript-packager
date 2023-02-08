@@ -68,7 +68,7 @@ Examples:
     - Alternatively, you may - at your own risk - bypass this warning following the guidance here: https://support.apple.com/guide/mac-help/apple-cant-check-app-for-malicious-software-mchleab3a043/mac
     - Afterwards, you can simply run the binary from the command line and provide the required flags
 
-# Run via Docker
+# Run via Docker 🐳
 
 - Build the docker image via `docker build . -t veracode-js-packager`
 - Run (from within the `JS app` you want to package) via `docker run -it --rm -v "$(pwd):/app/js-app" --name packager veracode-js-packager`
