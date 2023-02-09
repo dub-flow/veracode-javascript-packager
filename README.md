@@ -60,7 +60,7 @@ Examples:
 
 # Run via Docker 🐳
 
-1. Traverse into the directory of `JavaScript app` which you want to package
+1. Traverse into the directory of the `JavaScript app` that you want to package
 2. From within there, run `docker run -it --rm -v "$(pwd):/app/js-app" --name packager fw10/veracode-js-packager`
 
 # Run Tests 🧪
