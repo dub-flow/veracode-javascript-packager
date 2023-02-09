@@ -56,6 +56,7 @@ Examples:
 
 - You can simply run this tool from source via `go run .` 
 - You can build the tool yourself via `go build`
+- You can build the `docker` image yourself via `docker build . -t fw10/veracode-js-packager`
 
 # Run via Docker 🐳
 
