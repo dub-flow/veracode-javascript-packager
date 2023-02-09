@@ -58,8 +58,8 @@ Examples:
 
 # Run via Docker 🐳
 
-- Build the docker image via `docker build . -t veracode-js-packager`
-- Run (**from within the directory of the `JavaScript app` you want to package**) via `docker run -it --rm -v "$(pwd):/app/js-app" --name packager veracode-js-packager`
+1. Traverse into the directory of `JavaScript app` which you want to package
+2. From within there, run `docker run -it --rm -v "$(pwd):/app/js-app" --name packager fw10/veracode-js-packager`
 
 # Run Tests 🧪
 

@@ -1,10 +1,16 @@
 - Add it to the NPM registry
 - Add functionality to explicitly include certain files that my packager excludes (sample use case: `node_modules` may contain 2nd party code)
-- Remove all .json that are not bower.json, package.json, package-lock.json
 - Dry run functionality
 
 - Have a test to check e.g. if a `.js` file exists in the folder to zip up and otherwise say something like "You're sure this is the correct folder?"
 
+- Push image to dockerhub
+    - ![Docker Image Size](https://img.shields.io/docker/image-size/fw10/veracode-javascript-packager/latest)
+
 - `-t` instead of `-target`
     - Maybe use this tool for flag aliases: https://pkg.go.dev/rsc.io/getopt
     - Or maybe https://www.thorsten-hans.com/lets-build-a-cli-in-go-with-cobra/
+
+- Put the `frontend` in a different zip if is part of the backend
+    - See the upload here: 00659749, https://analysiscenter.veracode.com/auth/index.jsp#ReviewResultsAllFlaws:88684:1596933:23430557:23401801:23417451::5032891
+
