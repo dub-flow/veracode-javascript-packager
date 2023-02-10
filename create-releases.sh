@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
 
-VERSION="1.0.0"
+# get the current version of the tool from `./current_version`
+VERSION=$(cat current_version)
 
 FLAGS="-X main.AppVersion=$VERSION -s -w"
 
