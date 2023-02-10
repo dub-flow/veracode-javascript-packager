@@ -4,9 +4,6 @@
 
 - Have a test to check e.g. if a `.js` file exists in the folder to zip up and otherwise say something like "You're sure this is the correct folder?"
 
-- Push image to dockerhub
-    - ![Docker Image Size](https://img.shields.io/docker/image-size/fw10/veracode-javascript-packager/latest)
-
 - `-t` instead of `-target`
     - Maybe use this tool for flag aliases: https://pkg.go.dev/rsc.io/getopt
     - Or maybe https://www.thorsten-hans.com/lets-build-a-cli-in-go-with-cobra/
