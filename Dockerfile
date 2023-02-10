@@ -12,6 +12,7 @@ RUN go mod download
 COPY *.go ./
 # Copy the file to compile the app into the container
 COPY create-releases.sh ./
+COPY current_version ./
 
 # get e.g. `gcc` to compile the app (because this is not part of the `golang:*-alpine` images)
 RUN apk add build-base
