@@ -6,7 +6,6 @@ WORKDIR /app
 # Download all required dependencies
 COPY go.mod ./
 COPY go.sum ./
-RUN go mod download
 
 # Copy all .go files into the container
 COPY *.go ./
@@ -21,7 +20,11 @@ RUN apk add build-base
 RUN ./create-releases.sh docker
 
 # This is the much smaller docker image which we will use to run the app
-FROM alpine:latest
+FROM alpine
+
+# Running as a non-root user
+RUN adduser -D local
+USER local
 
 # Copy the compiled app into the distroless image
 COPY --from=build /app /app
