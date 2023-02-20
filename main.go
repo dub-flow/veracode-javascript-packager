@@ -101,14 +101,16 @@ func checkForPotentialSmells(source string) {
 
 		// only do checks for first party code
 		if !strings.Contains(path, "node_modules") {
-			// check if one of the files required for SCA exists... Note that `bower.json` may be part of `bower_components`
+			// check if one of the files required for SCA exists... Note that `bower.json` may be part of `bower_components`. Thus,
+			// the `if` above does not account for `bower_components` even though it has 3rd party code.
 			if !doesSCAFileExist {
 				doesSCAFileExist = CheckIfSCAFileExists(path)
 			}
 
-			// check for `.map` files (only in non-3rd party and "non-build" code)
+			// for the remaining checks, we don't want to look into `bower_components` or any other sort of build folder
 			if !strings.Contains(path, "bower_components") && !strings.Contains(path, "build") &&
 				!strings.Contains(path, "dist") && !strings.Contains(path, "public") {
+				// check for `.map` files (only in non-3rd party and "non-build" code)
 				if strings.HasSuffix(path, ".map") {
 					doesMapFileExist = true
 				}
