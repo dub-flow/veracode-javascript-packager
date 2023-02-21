@@ -16,6 +16,10 @@ import (
 	"github.com/fatih/color"
 )
 
+var doesSCAFileExist bool = false
+var doesMapFileExist bool = false
+var usesLockfileVersion3 bool = false
+
 func main() {
 	// parse all the command line flags
 	sourcePtr := flag.String("source", "", "The path of the JavaScript app you want to package (required)")
@@ -91,9 +95,6 @@ func main() {
 }
 
 func checkForPotentialSmells(source string) {
-	doesSCAFileExist := false
-	doesMapFileExist := false
-
 	err := filepath.Walk(source, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return nil
@@ -114,6 +115,12 @@ func checkForPotentialSmells(source string) {
 				if strings.HasSuffix(path, ".map") {
 					doesMapFileExist = true
 				}
+
+				// currently (as of Feb 2023), Veracode SCA does not support the new lockfile format version 3 of NPM. Thus, we look for this here
+				// and notify if version 3 is found
+				if strings.HasSuffix(path, "package-lock.json") && !usesLockfileVersion3 {
+					usesLockfileVersion3 = UsesLockfileVersion3(path)
+				}
 			}
 		}
 
@@ -132,6 +139,14 @@ func checkForPotentialSmells(source string) {
 	if doesMapFileExist {
 		log.Warn("\tThe 1st party code contains `.map` files outside of `/build`, `/dist` or `/public` (which indicates minified JavaScript)...")
 		log.Warn("\tPlease pass a directory to this tool that contains the unminified/unbundled/unconcatenated JavaScript (or TypeScript)")
+	}
+
+	if usesLockfileVersion3 {
+		log.Error("Veracode SCA does currently not support Lockfile Version 3. This means you will not get SCA results unless you" +
+			" downgrade your `package-lock.json` to version 2!")
+		log.Error("To achieve this, please run `npm install --lockfile 2`")
+	} else {
+		log.Info("The `package-lock.json` uses a supported lockfile version (version 3 is currently not supported)")
 	}
 }
 

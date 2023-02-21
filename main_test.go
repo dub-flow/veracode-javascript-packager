@@ -6,6 +6,7 @@ import (
 	"reflect"
 	"regexp"
 	"sort"
+	"strconv"
 
 	"testing"
 
@@ -26,7 +27,7 @@ func TestBefore(t *testing.T) {
 	log.SetLevel(log.WarnLevel)
 }
 
-// Integration test for `zipSource()` with `../sample-projects/sample-node-project`
+// Integration test for `zipSource()` with `./sample-projects/sample-node-project`
 func TestZipSourceWithNodeSample(t *testing.T) {
 	log.Info("---------- Running Test: TestZipSourceWithNodeSample ----------")
 
@@ -56,7 +57,7 @@ func TestZipSourceWithNodeSample(t *testing.T) {
 	log.Info("---------- Finished Test: TestZipSourceWithNodeSample ----------\n\n")
 }
 
-// Integration test for `zipSource()` with `../sample-projects/sample-node-project/` (note the trailing slash!). The reason
+// Integration test for `zipSource()` with `./sample-projects/sample-node-project/` (note the trailing slash!). The reason
 // for this test is that a trailing slash in the `-source` had lead to a bug that gave me quite some headache to figure out.
 func TestZipSourceWithNodeSampleAndTrailingSlash(t *testing.T) {
 	log.Info("---------- Running Test: TestZipSourceWithNodeSampleAndTrailingSlash ----------")
@@ -87,7 +88,7 @@ func TestZipSourceWithNodeSampleAndTrailingSlash(t *testing.T) {
 	log.Info("---------- Finished Test: TestZipSourceWithNodeSampleAndTrailingSlash ----------\n\n")
 }
 
-// Integration test for `zipSource()` with `../sample-projects/sample-node-project` and `-tests` provided
+// Integration test for `zipSource()` with `./sample-projects/sample-node-project` and `-tests` provided
 func TestZipSourceWithNodeSampleWithTestsFlag(t *testing.T) {
 	log.Info("---------- Running Test: TestZipSourceWithNodeSampleWithTestsFlag ----------")
 
@@ -118,7 +119,7 @@ func TestZipSourceWithNodeSampleWithTestsFlag(t *testing.T) {
 	log.Info("---------- Finished Test: TestZipSourceWithNodeSampleWithTestsFlag ----------\n\n")
 }
 
-// Integration test for `zipSource()` with `../sample-projects/sample-angular-project`
+// Integration test for `zipSource()` with `./sample-projects/sample-angular-project`
 func TestZipSourceWithAngularSample(t *testing.T) {
 	log.Info("---------- Running Test: TestZipSourceWithAngularSample ----------")
 
@@ -230,6 +231,34 @@ func TestZipSourceWithAngularSample(t *testing.T) {
 	}
 
 	log.Info("---------- Finished Test: TestZipSourceWithAngularSample ----------\n\n")
+}
+
+// Unit test for `UsesLockfileVersion3()` with a lock file that uses version 3 (`./sample-projects/lockfile-v3-test/package-lock.json`)
+func TestUsesLockfileVersion3(t *testing.T) {
+	expected := true
+	pathToLockFile := "." + string(os.PathSeparator) + "sample-projects" + string(os.PathSeparator) + "lockfile-v3-test" +
+		string(os.PathSeparator) + "package-lock.json"
+	usesLockFileV3 := UsesLockfileVersion3(pathToLockFile)
+
+	if !usesLockFileV3 {
+		t.Error("Test failed!")
+		t.Errorf("Got: %v", strconv.FormatBool(usesLockFileV3))
+		t.Errorf("Expected: %v", strconv.FormatBool(expected))
+	}
+}
+
+// Unit test for `UsesLockfileVersion3()` with a lock file that does not use version 3 (`./sample-projects/sample-node-project/package-lock.json`)
+func TestDoesNotUseLockfileVersion3(t *testing.T) {
+	expected := false
+	pathToLockFile := "." + string(os.PathSeparator) + "sample-projects" + string(os.PathSeparator) + "sample-node-project" +
+		string(os.PathSeparator) + "package-lock.json"
+	usesLockFileV3 := UsesLockfileVersion3(pathToLockFile)
+
+	if usesLockFileV3 {
+		t.Error("Test failed!")
+		t.Errorf("Got: %v", strconv.FormatBool(usesLockFileV3))
+		t.Errorf("Expected: %v", strconv.FormatBool(expected))
+	}
 }
 
 func generateZipAndReturnItsFiles(sourcePath string, targetPath string, testsPath string) []string {
