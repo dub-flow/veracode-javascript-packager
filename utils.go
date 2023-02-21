@@ -419,9 +419,9 @@ func UsesLockfileVersion3(path string) bool {
 		log.Error(err)
 	}
 
-	// parsing the lockfile to JSON
-    var lockfile map[string]interface{}
-    json.Unmarshal([]byte(packageLockFile), &lockfile)
+	// parsing the lockfile to JSON and check if version 3 is used
+	var lockfile map[string]interface{}
+	json.Unmarshal([]byte(packageLockFile), &lockfile)
 
-	return lockfile["lockfileVersion"].(float64) == 3 
+	return lockfile["lockfileVersion"].(float64) == 3
 }

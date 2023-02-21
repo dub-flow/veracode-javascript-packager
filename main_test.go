@@ -29,8 +29,6 @@ func TestBefore(t *testing.T) {
 
 // Integration test for `zipSource()` with `./sample-projects/sample-node-project`
 func TestZipSourceWithNodeSample(t *testing.T) {
-	log.Info("---------- Running Test: TestZipSourceWithNodeSample ----------")
-
 	sourcePath := "." + string(os.PathSeparator) + "sample-projects" + string(os.PathSeparator) + "sample-node-project"
 	targetPath := "." + string(os.PathSeparator) + "test-output" + string(os.PathSeparator) + "test-output.zip"
 
@@ -53,15 +51,11 @@ func TestZipSourceWithNodeSample(t *testing.T) {
 		t.Errorf("Got: %v", zipFileContents)
 		t.Errorf("Expected: %v", expectedFilesInOutputZip)
 	}
-
-	log.Info("---------- Finished Test: TestZipSourceWithNodeSample ----------\n\n")
 }
 
 // Integration test for `zipSource()` with `./sample-projects/sample-node-project/` (note the trailing slash!). The reason
 // for this test is that a trailing slash in the `-source` had lead to a bug that gave me quite some headache to figure out.
 func TestZipSourceWithNodeSampleAndTrailingSlash(t *testing.T) {
-	log.Info("---------- Running Test: TestZipSourceWithNodeSampleAndTrailingSlash ----------")
-
 	sourcePath := "." + string(os.PathSeparator) + "sample-projects" + string(os.PathSeparator) + "sample-node-project/"
 	targetPath := "." + string(os.PathSeparator) + "test-output" + string(os.PathSeparator) + "test-output.zip"
 
@@ -84,14 +78,10 @@ func TestZipSourceWithNodeSampleAndTrailingSlash(t *testing.T) {
 		t.Errorf("Got: %v", zipFileContents)
 		t.Errorf("Expected: %v", expectedFilesInOutputZip)
 	}
-
-	log.Info("---------- Finished Test: TestZipSourceWithNodeSampleAndTrailingSlash ----------\n\n")
 }
 
 // Integration test for `zipSource()` with `./sample-projects/sample-node-project` and `-tests` provided
 func TestZipSourceWithNodeSampleWithTestsFlag(t *testing.T) {
-	log.Info("---------- Running Test: TestZipSourceWithNodeSampleWithTestsFlag ----------")
-
 	sourcePath := "." + string(os.PathSeparator) + "sample-projects" + string(os.PathSeparator) + "sample-node-project"
 	targetPath := "." + string(os.PathSeparator) + "test-output" + string(os.PathSeparator) + "test-output.zip"
 	testsPath := "test"
@@ -115,8 +105,6 @@ func TestZipSourceWithNodeSampleWithTestsFlag(t *testing.T) {
 		t.Errorf("Got: %v", zipFileContents)
 		t.Errorf("Expected: %v", expectedFilesInOutputZip)
 	}
-
-	log.Info("---------- Finished Test: TestZipSourceWithNodeSampleWithTestsFlag ----------\n\n")
 }
 
 // Integration test for `zipSource()` with `./sample-projects/sample-angular-project`
@@ -258,6 +246,21 @@ func TestDoesNotUseLockfileVersion3(t *testing.T) {
 		t.Error("Test failed!")
 		t.Errorf("Got: %v", strconv.FormatBool(usesLockFileV3))
 		t.Errorf("Expected: %v", strconv.FormatBool(expected))
+	}
+}
+
+// Integration test for the logic to identify lockfile version 3 with `./sample-projects/lockfile-v3-test`
+func TestLockfileV3Integrationtest(t *testing.T) {
+	sourcePath := "." + string(os.PathSeparator) + "sample-projects" + string(os.PathSeparator) + "lockfile-v3-test"
+
+	// generate the zip file and return a list of all its file names
+	checkForPotentialSmells(sourcePath)
+
+	// check if the global `usesLockfileVersion3` is true
+	if !usesLockfileVersion3 {
+		t.Error("Test failed! It uses lockfile version 3 but this is not identified")
+		t.Errorf("Got: %v", strconv.FormatBool(usesLockfileVersion3))
+		t.Errorf("Expected: %v", strconv.FormatBool(true))
 	}
 }
 
