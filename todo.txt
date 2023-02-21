@@ -1,6 +1,6 @@
 - Add it to the NPM registry
 - Add functionality to explicitly include certain files that my packager excludes (sample use case: `node_modules` may contain 2nd party code)
-- Dry run functionality
+- Dry run functionality - Return JSON
 
 - Have a test to check e.g. if a `.js` file exists in the folder to zip up and otherwise say something like "You're sure this is the correct folder?"
 

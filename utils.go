@@ -349,7 +349,7 @@ func IsPublicFolder(path string) bool {
 
 	if strings.HasSuffix(path, publicFolderPath) || strings.Contains(path, fileInPublicFolderPath) {
 		if !didPrintPublicMsg {
-			log.Info("\tIgnoring `build` folder")
+			log.Info("\tIgnoring `public` folder")
 			didPrintPublicMsg = true
 		}
 
