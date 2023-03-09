@@ -252,6 +252,7 @@ func isRequired(path string, testsPath string) bool {
 		!IsPublicFolder(path) &&
 		!IsIdeFolder(path) &&
 		!IsMinified(path) &&
+		!IsArchive(path) &&
 		!IsMiscNotRequiredFile(path)
 
 	// the default is to not omit the file

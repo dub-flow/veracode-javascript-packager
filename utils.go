@@ -27,6 +27,7 @@ var didPrintGitFolderMsg bool = false
 var didPrintBowerComponentsMsg bool = false
 var didPrintVideoMsg bool = false
 var didPringIsMinified bool = false
+var didPrintArchiveMsg bool = false
 
 // check for the `package-lock.json`, `yarn.lock` or `bower.json` (required for SCA)
 func CheckIfSCAFileExists(path string) bool {
@@ -388,6 +389,24 @@ func IsMinified(path string) bool {
 		}
 
 		return true
+	}
+
+	return false
+}
+
+// check for archives
+func IsArchive(path string) bool {
+	archiveExtensions := []string{".zip", ".zipx", ".gz", ".tar", ".gzip", ".7z", ".rar"}
+
+	for _, element := range archiveExtensions {
+		if strings.HasSuffix(path, element) {
+			if !didPrintArchiveMsg {
+				log.Info("\tIgnoring nested archives (such as `.zip`)")
+				didPrintArchiveMsg = true
+			}
+
+			return true
+		}
 	}
 
 	return false
