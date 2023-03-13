@@ -24,3 +24,5 @@ veracode-js-packager
 
 # test stuff
 test-output
+
+dist/
