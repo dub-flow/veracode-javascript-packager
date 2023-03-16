@@ -61,6 +61,10 @@ Examples:
 - You can build the `docker` image yourself via `docker build . -t fw10/veracode-js-packager`
     - `Note`: This would only work on Unix at the moment
 
+# Run Tests 🧪
+
+- To run the tests, run `go test` or `go test -v` (for more details)
+
 # Run via Docker 🐳
 
 1. Traverse **into** the directory of the `JavaScript app` that you want to package
@@ -79,10 +83,6 @@ Examples:
       chmod +x veracode-js-packager-linux-amd64
       ./veracode-js-packager-linux-amd64 -source <path-to-js-app> -target <path-of-output-zip>
 ```
-
-# Run Tests 🧪
-
-- To run the tests, run `go test` or `go test -v` (for more details)
 
 # Releases 🔑 
 
