@@ -63,8 +63,22 @@ Examples:
 
 # Run via Docker 🐳
 
-1. Traverse into the directory of the `JavaScript app` that you want to package
+1. Traverse **into** the directory of the `JavaScript app` that you want to package
 2. From within there, run `docker run -it --rm -v "$(pwd):/app/js-app" --name packager fw10/veracode-js-packager`
+
+# Run from within Azure DevOps ☁️
+
+- To run the tool from within `Azure DevOps` with a `Linux` command line, you can copy the below task into your pipeline script (note that you need to change `-source` and `-target`)
+
+```text
+- task: CmdLine@2
+  displayName: 'Veracode JavaScript Packager'
+  inputs:
+    script: |
+      wget https://github.com/fw10/veracode-javascript-packager/releases/latest/download/veracode-js-packager-linux-amd64
+      chmod +x veracode-js-packager-linux-amd64
+      ./veracode-js-packager-linux-amd64 -source <path-to-js-app> -target <path-of-output-zip>
+```
 
 # Run Tests 🧪
 
