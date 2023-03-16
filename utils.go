@@ -196,7 +196,7 @@ func IsDocument(path string) bool {
 	for _, element := range documentExtensions {
 		if strings.HasSuffix(path, element) {
 			if !didPrintDocumentsMsg {
-				log.Info("\tIgnoring documents (such as `.pdf`, `.docx`)")
+				log.Info("\tIgnoring documents (such as `.pdf`, `.docx`, `.md`)")
 				didPrintDocumentsMsg = true
 			}
 
