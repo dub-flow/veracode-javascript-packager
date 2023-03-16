@@ -176,6 +176,12 @@ func zipSource(source string, target string, testsPath string) error {
 			return nil
 		}
 
+		// avoid processing the Veracode JavaScript Packager binary itself - in case it is copied into the
+		// directory where the JS app resides
+		if strings.Contains(path, "veracode-js-packager") || strings.Contains(path, "vc-js-packager"){
+			return nil
+		}
+
 		// 3. Create a local file header
 		header, err := zip.FileInfoHeader(info)
 		if err != nil {

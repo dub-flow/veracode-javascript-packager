@@ -10,3 +10,5 @@
 
 - Put the `frontend` in a different zip if is part of the backend
     - See the upload here: 00659749, https://analysiscenter.veracode.com/auth/index.jsp#ReviewResultsAllFlaws:88684:1596933:23430557:23401801:23417451::5032891
+
+- Test if unsigned binaries lead to issues in Windows
