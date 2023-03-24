@@ -5,12 +5,15 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 
 	"github.com/fatih/color"
 	"github.com/hashicorp/go-version"
 )
 
-var AppVersion string = "0.0.0"
+var AppVersion string = getCurrentAppVersion()
+
+var currentVersionFile string = "./current_version"
 var latestRelease string = "https://github.com/fw10/veracode-javascript-packager/releases/latest"
 
 func notifyOfUpdates() {
@@ -44,10 +47,26 @@ func notifyOfUpdates() {
 	}
 
 	vCurrent, err := version.NewVersion(AppVersion)
-	vLatest, err := version.NewVersion(response["tag_name"].(string))
+	if err != nil {
+		fmt.Print(err)
+	}
 
-	// check if a newer version exists
+	vLatest, err := version.NewVersion(response["tag_name"].(string))
+	if err != nil {
+		fmt.Print(err)
+	}
+
+	// check if a newer version exists in the GitHub Releases
 	if vCurrent.LessThan(vLatest) {
 		color.HiYellow(fmt.Sprintf("Please upgrade to the latest version of this tool (%s) by visiting %s\n\n", response["tag_name"], latestRelease))
 	}
+}
+
+func getCurrentAppVersion() string {
+	currentVersion, err := os.ReadFile(currentVersionFile)
+	if err != nil {
+		fmt.Print(err)
+	}
+
+	return string(currentVersion)
 }
