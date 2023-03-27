@@ -73,9 +73,14 @@ func main() {
 		testsPath = ""
 	} else {
 		// combine that last segment of the `sourcePtr` with the value provided via `-test`.
-		// Example: If `-test mytests` and `-source /some/node-project`, then `testsPath` will be: "node-project/mytests"
-		testsPath = filepath.Join(path.Base(*sourcePtr), *testsPtr)
-		log.Info("\tProvided `-test` directory (its content will be omitted): ", testsPath, "\n\n")
+		// Example: If `-test mytests` and `-source /some/node-project`, then `testsPathToLog` will be: "node-project/mytests"
+		var testsPathToLog string = filepath.Join(path.Base(*sourcePtr), *testsPtr)
+		log.Info("\tProvided `-test` directory (its content will be omitted): ", testsPathToLog, "\n\n")
+
+		// we want the test path to start with a `/`, e.g. `test` would become `/test`. This makes string matching easier
+		// as we can e.g. check if a path has the suffix `/test` instead of checking if it has the suffix `test` (the latter may be
+		// ambigious; e.g. "attest" has the suffix "test" but may contain actual source code and not tests)
+		testsPath = string(os.PathSeparator) + *testsPtr
 	}
 
 	// check for some "smells" (e.g. the `package-lock.json` file is missing), and print corresponding warnings/errors
@@ -178,7 +183,7 @@ func zipSource(source string, target string, testsPath string) error {
 
 		// avoid processing the Veracode JavaScript Packager binary itself - in case it is copied into the
 		// directory where the JS app resides
-		if strings.Contains(path, "veracode-js-packager") || strings.Contains(path, "vc-js-packager"){
+		if strings.Contains(path, "veracode-js-packager") || strings.Contains(path, "vc-js-packager") {
 			return nil
 		}
 
