@@ -5,15 +5,12 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"os"
 
 	"github.com/fatih/color"
 	"github.com/hashicorp/go-version"
 )
 
-var AppVersion string = getCurrentAppVersion()
-
-var currentVersionFile string = "./current_version"
+var AppVersion string = "0.0.0"
 var latestRelease string = "https://github.com/fw10/veracode-javascript-packager/releases/latest"
 
 func notifyOfUpdates() {
@@ -62,11 +59,3 @@ func notifyOfUpdates() {
 	}
 }
 
-func getCurrentAppVersion() string {
-	currentVersion, err := os.ReadFile(currentVersionFile)
-	if err != nil {
-		fmt.Print(err)
-	}
-
-	return string(currentVersion)
-}

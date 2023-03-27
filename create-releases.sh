@@ -30,4 +30,9 @@ else
     if [ $1 = "docker" ]; then
         go build -ldflags="$FLAGS" -trimpath -o veracode-js-packager
     fi
+
+    # check if `./create-releases.sh local` is ran which means we only compile for the architecture of the current machine
+    if [ $1 = "local" ]; then
+        go build -ldflags="$FLAGS" -trimpath -o veracode-js-packager
+    fi
 fi
