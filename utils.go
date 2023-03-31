@@ -131,7 +131,7 @@ func IsCommonTestFolder(path string) bool {
 
 // check for common test files (like .spec.js)
 func IsTestFile(path string) bool {
-	testExtensions := [3]string{".spec.ts", ".test.tsx", ".spec.js"}
+	testExtensions := []string{".spec.ts", ".test.tsx", ".spec.js", ".test.js"}
 
 	for _, element := range testExtensions {
 		if strings.HasSuffix(path, element) {
