@@ -47,10 +47,13 @@ func main() {
 	color.Green("#                                               #")
 	color.Green("#################################################" + "\n\n")
 
+	// check if the AppVersion was already set during compilation - otherwise manually get it from `./current_version`
+	CheckAppVersion()
+
 	color.Yellow("Current version: %s\n\n", AppVersion)
 
 	// check if a later version of this tool exists
-	notifyOfUpdates()
+	NotifyOfUpdates()
 
 	// fail if `--source` was not provided
 	if *sourcePtr == "" {

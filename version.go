@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 
 	"github.com/fatih/color"
 	"github.com/hashicorp/go-version"
@@ -13,7 +14,7 @@ import (
 var AppVersion string = "0.0.0"
 var latestRelease string = "https://github.com/fw10/veracode-javascript-packager/releases/latest"
 
-func notifyOfUpdates() {
+func NotifyOfUpdates() {
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", latestRelease, nil)
 	if err != nil {
@@ -59,3 +60,17 @@ func notifyOfUpdates() {
 	}
 }
 
+func CheckAppVersion() {
+	if AppVersion == "0.0.0" {
+		version, err := os.ReadFile("current_version")
+		if err != nil {
+			fmt.Print(err)
+		}
+
+		// manually assign the value from `./current_version` if it wasn't assigned during compilation already. This makes sure
+		// that also people that run/build the app manually (without compiling the `./current_version` into the output) get the
+		// appropriate version and aren't unnecessarily prompted to update the tool.
+		AppVersion = string(version)
+	}
+	// if the AppVersion is not "0.0.0" at this point, it means it has been set when compiling the app so we just leave that
+}

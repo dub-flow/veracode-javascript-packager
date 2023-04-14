@@ -9,7 +9,7 @@ COPY go.sum ./
 
 # Copy all .go files into the container
 COPY *.go ./
-# Copy the file to compile the app into the container
+# Copy the files to compile the app into the container
 COPY create-releases.sh ./
 COPY current_version ./
 
