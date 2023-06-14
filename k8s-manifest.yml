@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: veracode-js-packager
+spec:
+  containers:
+  - name: packager
+    image: fw10/veracode-js-packager
+    volumeMounts:
+    - name: js-app-to-package
+      mountPath: /app/js-app
+  volumes:
+  - name: js-app-to-package
+    hostPath:
+      # the absolute path where the JS app resides, e.g. "/home/someuser/git/veracode-javascript-packager/sample-projects/sample-node-project"
+      path: <absolute_path_to_JS_app>

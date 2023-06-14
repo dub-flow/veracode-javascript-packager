@@ -92,6 +92,13 @@ Examples:
     - Alternatively, you may - at your own risk - bypass this warning following the guidance here: https://support.apple.com/guide/mac-help/apple-cant-check-app-for-malicious-software-mchleab3a043/mac
     - Afterwards, you can simply run the binary from the command line and provide the required flags
 
+# Kubernetes ☸ 
+
+- You can now also run the app via `Kubernetes` (I don't really see a reason for doing so at this point though)
+- To do this, you have to change the `hostPath.path` in the `k8s-manifest.yml` to the **absolute** path where the JavaScript app resides that you want to be package
+- Afterwards, run `kubectl apply -f k8s-manifest.yml`
+    - This will output the `zip` (that you can upload to `Veracode Static Analysis`) into the provided `hostPath.path`
+
 # Bug Reports 🐞
 
 If you find a bug, please file an Issue right here in GitHub, and I will try to resolve it in a timely manner.
