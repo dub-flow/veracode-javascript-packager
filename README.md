@@ -1,5 +1,5 @@
-![Go Version](https://img.shields.io/github/go-mod/go-version/fw10/veracode-javascript-packager)
-![GitHub Downloads](https://img.shields.io/github/downloads/fw10/veracode-javascript-packager/total)
+![Go Version](https://img.shields.io/github/go-mod/go-version/dub-flow/veracode-javascript-packager)
+![GitHub Downloads](https://img.shields.io/github/downloads/dub-flow/veracode-javascript-packager/total)
 ![Docker Image Size](https://img.shields.io/docker/image-size/fw10/veracode-js-packager/latest)
 ![Docker Pulls](https://img.shields.io/docker/pulls/fw10/veracode-js-packager)
 
