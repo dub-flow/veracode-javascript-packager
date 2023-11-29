@@ -6,7 +6,6 @@ import (
 	"reflect"
 	"regexp"
 	"sort"
-	"strconv"
 
 	"testing"
 
@@ -219,49 +218,6 @@ func TestZipSourceWithAngularSample(t *testing.T) {
 	}
 
 	log.Info("---------- Finished Test: TestZipSourceWithAngularSample ----------\n\n")
-}
-
-// Unit test for `UsesLockfileVersion3()` with a lock file that uses version 3 (`./sample-projects/lockfile-v3-test/package-lock.json`)
-func TestUsesLockfileVersion3(t *testing.T) {
-	expected := true
-	pathToLockFile := "." + string(os.PathSeparator) + "sample-projects" + string(os.PathSeparator) + "lockfile-v3-test" +
-		string(os.PathSeparator) + "package-lock.json"
-	usesLockFileV3 := UsesLockfileVersion3(pathToLockFile)
-
-	if !usesLockFileV3 {
-		t.Error("Test failed!")
-		t.Errorf("Got: %v", strconv.FormatBool(usesLockFileV3))
-		t.Errorf("Expected: %v", strconv.FormatBool(expected))
-	}
-}
-
-// Unit test for `UsesLockfileVersion3()` with a lock file that does not use version 3 (`./sample-projects/sample-node-project/package-lock.json`)
-func TestDoesNotUseLockfileVersion3(t *testing.T) {
-	expected := false
-	pathToLockFile := "." + string(os.PathSeparator) + "sample-projects" + string(os.PathSeparator) + "sample-node-project" +
-		string(os.PathSeparator) + "package-lock.json"
-	usesLockFileV3 := UsesLockfileVersion3(pathToLockFile)
-
-	if usesLockFileV3 {
-		t.Error("Test failed!")
-		t.Errorf("Got: %v", strconv.FormatBool(usesLockFileV3))
-		t.Errorf("Expected: %v", strconv.FormatBool(expected))
-	}
-}
-
-// Integration test for the logic to identify lockfile version 3 with `./sample-projects/lockfile-v3-test`
-func TestLockfileV3Integrationtest(t *testing.T) {
-	sourcePath := "." + string(os.PathSeparator) + "sample-projects" + string(os.PathSeparator) + "lockfile-v3-test"
-
-	// generate the zip file and return a list of all its file names
-	checkForPotentialSmells(sourcePath)
-
-	// check if the global `usesLockfileVersion3` is true
-	if !usesLockfileVersion3 {
-		t.Error("Test failed! It uses lockfile version 3 but this is not identified")
-		t.Errorf("Got: %v", strconv.FormatBool(usesLockfileVersion3))
-		t.Errorf("Expected: %v", strconv.FormatBool(true))
-	}
 }
 
 func generateZipAndReturnItsFiles(sourcePath string, targetPath string, testsPath string) []string {

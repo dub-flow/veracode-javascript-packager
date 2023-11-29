@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"os"
 	"strings"
 
@@ -428,19 +427,4 @@ func IsMiscNotRequiredFile(path string) bool {
 	}
 
 	return false
-}
-
-func UsesLockfileVersion3(path string) bool {
-	log.Info("Looking at the `package-lock.json` file to identify the lockfile version")
-
-	packageLockFile, err := os.ReadFile(path)
-	if err != nil {
-		log.Error(err)
-	}
-
-	// parsing the lockfile to JSON and check if version 3 is used
-	var lockfile map[string]interface{}
-	json.Unmarshal([]byte(packageLockFile), &lockfile)
-
-	return lockfile["lockfileVersion"].(float64) == 3
 }
